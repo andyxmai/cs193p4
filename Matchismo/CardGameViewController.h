@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GameHistoryViewController.h"
 
 @interface CardGameViewController : UIViewController
+
+- (void)updateUI;
 
 @end
