@@ -16,8 +16,6 @@
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
-@property (weak, nonatomic) IBOutlet UILabel *resultLabel;
-@property (strong, nonatomic) NSMutableArray *gameHistory;
 @end
 
 @implementation CardGameViewController
@@ -34,15 +32,6 @@
     }
     
     return _game;
-}
-
-- (NSMutableArray *)gameHistory
-{
-    if (!_gameHistory) {
-        _gameHistory = [[NSMutableArray alloc] init];
-    }
-    
-    return _gameHistory;
 }
 
 /*
@@ -69,7 +58,6 @@
 - (IBAction)redealButton:(UIButton *)sender
 {
     self.game = nil;
-    self.gameHistory = nil;
     [self updateUI];
   }
 
@@ -87,7 +75,6 @@
         cardButton.enabled = !card.isMatched;
     }
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
-    self.resultLabel.attributedText = [self getLastResultString];
 }
 
 /*
@@ -105,18 +92,11 @@
         [result appendAttributedString:currentCards];
         [result appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"don't match! %d points penalty!",-1*self.game.scoreDiff]]];
         
-        if (![self.gameHistory containsObject:result]){
-            [self.gameHistory addObject:result];
-        }
         self.game.scoreDiff = 0;
     } else {
         [result appendAttributedString:[[NSAttributedString alloc] initWithString:@"Matched "]];
         [result appendAttributedString:currentCards];
         [result appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat: @"for %d points",self.game.scoreDiff]]];
-        
-        if (![self.gameHistory containsObject:result]){
-            [self.gameHistory addObject:result];
-        }
     }
     
     return result;
@@ -158,24 +138,6 @@
 - (UIImage *)backgroundImageForCard:(Card *)card
 {
     return [UIImage imageNamed:card.isChosen ? @"cardfront" : @"cardback"];
-}
-
-
-#pragma mark - Navigation
- 
-/*
- Prepares for segue and transfer the game history to the GameHistoryViewController
- */
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:@"GetHistory"]) {
-        if ([segue.destinationViewController isKindOfClass:[GameHistoryViewController class]]) {
-            GameHistoryViewController *gameVC = (GameHistoryViewController *)segue.destinationViewController;
-            gameVC.gameHistory = self.gameHistory;
-        }
-    }
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
 }
 
 @end
