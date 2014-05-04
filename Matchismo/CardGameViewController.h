@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GameHistoryViewController.h"
+#import "Grid.h"
 
 @interface CardGameViewController : UIViewController
 

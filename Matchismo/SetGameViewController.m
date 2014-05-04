@@ -9,6 +9,7 @@
 #import "SetGameViewController.h"
 
 @interface SetGameViewController ()
+@property (weak, nonatomic) IBOutlet UIView *cardsBoundaryView;
 
 @end
 
@@ -17,6 +18,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    Grid *cardGrid = [[Grid alloc] init];
+    cardGrid.cellAspectRatio = 0.5;
+    cardGrid.minimumNumberOfCells = 12;
+    cardGrid.size = self.cardsBoundaryView.bounds.size;
+    
     
     [self updateUI];
 }
@@ -75,7 +82,7 @@
  */
 - (UIColor *)getColorWithIndex:(NSNumber *)index
 {
-    NSArray *colors = @[[UIColor redColor],[UIColor greenColor],[UIColor blueColor]];
+    NSArray *colors = @[[UIColor redColor],[UIColor greenColor],[UIColor purpleColor]];
     UIColor *color = colors[[index intValue]];
     
     return color;
