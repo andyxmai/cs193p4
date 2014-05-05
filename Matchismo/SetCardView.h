@@ -8,7 +8,8 @@
 
 #import "CardView.h"
 
-@interface PlayingCardView : CardView
+@interface SetCardView : CardView
+//@property (nonatomic) NSInteger shape;
 @property (nonatomic, strong) NSString *suit;
 @property (nonatomic) NSUInteger rank;
 @property (nonatomic) BOOL faceUp;

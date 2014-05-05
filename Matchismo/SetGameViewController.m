@@ -6,21 +6,64 @@
 //  Copyright (c) 2014 CS193p. All rights reserved.
 //
 
+#import "Deck.h"
+#import "SetCardDeck.h"
+#import "SetCard.h"
+#import "CardMatchingGame.h"
 #import "SetGameViewController.h"
 
 @interface SetGameViewController ()
+@property (strong, nonatomic) CardMatchingGame *game;
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
+
 @property (weak, nonatomic) IBOutlet UIView *cardsBoundaryView;
+@property (strong, nonatomic) Grid *cardGrid;
+@property (strong, nonatomic) NSMutableArray *cardViews;
+
 
 @end
 
 @implementation SetGameViewController
 
+#define NUM_START_CARDS 12
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    [self updateUI];
+    [self populateCards];
 }
+
+- (void)populateCards
+{
+    NSUInteger counter = 0;
+    for (NSUInteger i = 0; i < self.cardGrid.rowCount; i++) {
+        for (NSUInteger j = 0; j < self.cardGrid.columnCount; j++) {
+            CGPoint center = [self.cardGrid centerOfCellAtRow:i inColumn:j];
+            CGRect frame = [self.cardGrid frameOfCellAtRow:i inColumn:j];
+            SetCardView *cardView = [[SetCardView alloc] initWithFrame:frame];
+            cardView.center = center;
+            Card *card = [self.game cardAtIndex:counter];
+            cardView.faceUp = YES;
+            [self.cardsBoundaryView addSubview:cardView];
+            [self.cardViews addObject:cardView];
+            counter++;
+        }
+    }
+}
+
+- (Grid *)cardGrid {
+    if (!_cardGrid) {
+        _cardGrid = [[Grid alloc] init];
+        _cardGrid.cellAspectRatio = 0.75;
+        _cardGrid.minimumNumberOfCells = NUM_START_CARDS;
+        _cardGrid.size = self.cardsBoundaryView.bounds.size;
+    }
+    
+    return _cardGrid;
+}
+
+
+
 
 /*
  Creates the deck by calling the custom init method PlayingCardDeck.
@@ -108,5 +151,52 @@
     
     return cardContents;
 }
+
+
+
+
+
+
+
+/*
+ Getter for game. Calls the custom init method if it has not been initialized.
+ */
+- (CardMatchingGame *)game
+{
+    if (!_game) {
+        
+        _game = [[CardMatchingGame alloc] initWithCardCount:NUM_START_CARDS
+                                                  usingDeck:[self createDeck]];
+    }
+    
+    return _game;
+}
+
+/*
+ Button event for the left Card
+ */
+- (IBAction)touchCardButton:(UIButton *)sender
+{
+    int chosenButtonIndex = [self.cardButtons indexOfObject:sender];
+    [self.game chooseCardAtIndex:chosenButtonIndex];
+    [self updateUI];
+}
+
+/*
+ Updates the UI to reflect which cards have been flipped and matched.
+ It also sets the texts of the labels.
+ */
+- (void)updateUI
+{
+    for (UIButton *cardButton in self.cardButtons) {
+        int cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
+        Card *card = [self.game cardAtIndex:cardButtonIndex];
+        [cardButton setAttributedTitle:[self titleForCard:card] forState:UIControlStateNormal];
+        [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
+        cardButton.enabled = !card.isMatched;
+    }
+//    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+}
+
 
 @end

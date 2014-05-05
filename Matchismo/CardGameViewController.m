@@ -44,7 +44,7 @@
             Card *card = [self.game cardAtIndex:counter];
             cardView.suit = ((PlayingCard *)card).suit;
             cardView.rank = ((PlayingCard *)card).rank;
-            cardView.faceUp = NO;
+            cardView.faceUp = YES;
             [self.cardsBoundaryView addSubview:cardView];
             [self.cardViews addObject:cardView];
             counter++;

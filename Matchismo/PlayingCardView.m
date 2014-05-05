@@ -86,9 +86,7 @@
     NSString *rank = [self rankAsString];
     NSString *suit = self.suit;
     
-    NSAttributedString *cornerText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", rank, suit]
-                                                                     attributes:@{ NSParagraphStyleAttributeName : paragraphStyle,
-                                                                                   NSFontAttributeName : cornerFont }];
+    NSAttributedString *cornerText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", rank, suit] attributes:@{ NSParagraphStyleAttributeName : paragraphStyle, NSFontAttributeName : cornerFont }];
     
     CGRect textBounds;
     textBounds.origin = CGPointMake([self cornerOffset], [self cornerOffset]);

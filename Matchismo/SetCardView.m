@@ -6,15 +6,15 @@
 //  Copyright (c) 2014 CS193p. All rights reserved.
 //
 
-#import "PlayingCardView.h"
+#import "SetCardView.h"
 
-@interface PlayingCardView()
+@interface SetCardView()
 @property (nonatomic) CGFloat faceCardScaleFactor;
 
 @end
 
 
-@implementation PlayingCardView
+@implementation SetCardView
 
 #define CORNER_FONT_STANDARD_HEIGHT 180.0
 #define CORNER_RADIUS 12.0
@@ -86,9 +86,7 @@
     NSString *rank = [self rankAsString];
     NSString *suit = self.suit;
     
-    NSAttributedString *cornerText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", rank, suit]
-                                                                     attributes:@{ NSParagraphStyleAttributeName : paragraphStyle,
-                                                                                   NSFontAttributeName : cornerFont }];
+    NSAttributedString *cornerText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", rank, suit] attributes:@{ NSParagraphStyleAttributeName : paragraphStyle, NSFontAttributeName : cornerFont }];
     
     CGRect textBounds;
     textBounds.origin = CGPointMake([self cornerOffset], [self cornerOffset]);
@@ -141,9 +139,6 @@
     squigglePath.lineWidth = 2;
     [squigglePath stroke];
 }
-[self drawSquiggle:CGPointMake(30.0,10.0) width:20 height:10];
-[self drawDiamond:CGPointMake(50.0,50.0) width:20 height:10];
-[self drawOval:CGPointMake(50.0,100.0) width:20 height:10];
 
 
 - (void)pushContextAndRotateUpsideDown
@@ -170,72 +165,11 @@
 #define PIP_VOFFSET1_PERCENTAGE 0.090
 #define PIP_VOFFSET2_PERCENTAGE 0.175
 #define PIP_VOFFSET3_PERCENTAGE 0.270
+#define PIP_FONT_SCALE_FACTOR 0.015
 
 - (void)drawPips
 {
-    if ((self.rank == 1) || (self.rank == 5) || (self.rank == 9) || (self.rank == 3)) {
-        [self drawPipsWithHorizontalOffset:0
-                            verticalOffset:0
-                        mirroredVertically:NO];
-    }
-    if ((self.rank == 6) || (self.rank == 7) || (self.rank == 8)) {
-        [self drawPipsWithHorizontalOffset:PIP_HOFFSET_PERCENTAGE
-                            verticalOffset:0
-                        mirroredVertically:NO];
-    }
-    if ((self.rank == 2) || (self.rank == 3) || (self.rank == 7) || (self.rank == 8) || (self.rank == 10)) {
-        [self drawPipsWithHorizontalOffset:0
-                            verticalOffset:PIP_VOFFSET2_PERCENTAGE
-                        mirroredVertically:(self.rank != 7)];
-    }
-    if ((self.rank == 4) || (self.rank == 5) || (self.rank == 6) || (self.rank == 7) || (self.rank == 8) || (self.rank == 9) || (self.rank == 10)) {
-        [self drawPipsWithHorizontalOffset:PIP_HOFFSET_PERCENTAGE
-                            verticalOffset:PIP_VOFFSET3_PERCENTAGE
-                        mirroredVertically:YES];
-    }
-    if ((self.rank == 9) || (self.rank == 10)) {
-        [self drawPipsWithHorizontalOffset:PIP_HOFFSET_PERCENTAGE
-                            verticalOffset:PIP_VOFFSET1_PERCENTAGE
-                        mirroredVertically:YES];
-    }
-}
-
-#define PIP_FONT_SCALE_FACTOR 0.015
-
-- (void)drawPipsWithHorizontalOffset:(CGFloat)hoffset
-                      verticalOffset:(CGFloat)voffset
-                          upsideDown:(BOOL)upsideDown
-{
-    if (upsideDown) [self pushContextAndRotateUpsideDown];
-    CGPoint middle = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
-    UIFont *pipFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    pipFont = [pipFont fontWithSize:[pipFont pointSize] * self.bounds.size.width * PIP_FONT_SCALE_FACTOR];
-    NSAttributedString *attributedSuit = [[NSAttributedString alloc] initWithString:self.suit attributes:@{ NSFontAttributeName : pipFont }];
-    CGSize pipSize = [attributedSuit size];
-    CGPoint pipOrigin = CGPointMake(
-                                    middle.x-pipSize.width/2.0-hoffset*self.bounds.size.width,
-                                    middle.y-pipSize.height/2.0-voffset*self.bounds.size.height
-                                    );
-    [attributedSuit drawAtPoint:pipOrigin];
-    if (hoffset) {
-        pipOrigin.x += hoffset*2.0*self.bounds.size.width;
-        [attributedSuit drawAtPoint:pipOrigin];
-    }
-    if (upsideDown) [self popContext];
-}
-
-- (void)drawPipsWithHorizontalOffset:(CGFloat)hoffset
-                      verticalOffset:(CGFloat)voffset
-                  mirroredVertically:(BOOL)mirroredVertically
-{
-    [self drawPipsWithHorizontalOffset:hoffset
-                        verticalOffset:voffset
-                            upsideDown:NO];
-    if (mirroredVertically) {
-        [self drawPipsWithHorizontalOffset:hoffset
-                            verticalOffset:voffset
-                                upsideDown:YES];
-    }
+    
 }
 
 #pragma mark Gestures
