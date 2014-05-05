@@ -206,7 +206,7 @@
 - (void)flipCardWithTouch:(UITapGestureRecognizer *)recognizer
 {
     self.faceUp = !self.faceUp;
-    NSLog(@"Tapped");
+    //NSLog(@"Tapped");
 }
 
 #pragma mark Properties
