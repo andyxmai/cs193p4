@@ -23,29 +23,46 @@
 
 @implementation CardGameViewController
 
+#define NUM_START_CARDS 12
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    //Hard code count
-    
-    PlayingCardView *cardView = [[PlayingCardView alloc] initWithFrame:CGRectMake(100, 100, 100, 200)];
-    cardView.suit = @"♣︎";
-    cardView.rank = 12;
-    [self.cardsBoundaryView addSubview:cardView];
+    [self populateCards];
+}
+
+- (void)populateCards
+{
+    NSUInteger counter = 0;
+    for (NSUInteger i = 0; i < self.cardGrid.rowCount; i++) {
+        for (NSUInteger j = 0; j < self.cardGrid.columnCount; j++) {
+            CGPoint center = [self.cardGrid centerOfCellAtRow:i inColumn:j];
+            CGRect frame = [self.cardGrid frameOfCellAtRow:i inColumn:j];
+            PlayingCardView *cardView = [[PlayingCardView alloc] initWithFrame:frame];
+            cardView.center = center;
+            Card *card = [self.game cardAtIndex:counter];
+            cardView.suit = ((PlayingCard *)card).suit;
+            cardView.rank = ((PlayingCard *)card).rank;
+            cardView.faceUp = NO;
+            [self.cardsBoundaryView addSubview:cardView];
+            [self.cardViews addObject:cardView];
+            counter++;
+        }
+    }
+
 }
 
 - (Grid *)cardGrid {
     if (!_cardGrid) {
         _cardGrid = [[Grid alloc] init];
         _cardGrid.cellAspectRatio = 0.75;
-        _cardGrid.minimumNumberOfCells = 12;
+        _cardGrid.minimumNumberOfCells = NUM_START_CARDS;
         _cardGrid.size = self.cardsBoundaryView.bounds.size;
     }
     
     return _cardGrid;
 }
-
 
 /*
  Getter for game. Calls the custom init method if it has not been initialized.
@@ -54,7 +71,7 @@
 {
     if (!_game) {
         
-        _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardViews count]
+        _game = [[CardMatchingGame alloc] initWithCardCount:NUM_START_CARDS
                                                           usingDeck:[self createDeck]];
     }
     

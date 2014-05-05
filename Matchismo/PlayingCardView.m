@@ -51,21 +51,25 @@
 {
     [super drawRect:rect];
     
-    
-    NSString *imageName = [NSString stringWithFormat:@"%@%@", [self rankAsString], self.suit];
-    UIImage *faceImage = [UIImage imageNamed:imageName];
-    NSLog(imageName);
-    if (faceImage) {
-        NSLog(@"faceImage Found");
+    if (self.faceUp) {
+        NSString *imageName = [NSString stringWithFormat:@"%@%@", [self rankAsString], self.suit];
+        UIImage *faceImage = [UIImage imageNamed:imageName];
+        if (faceImage) {
+            CGRect imageRect = CGRectInset(self.bounds,
+                                           self.bounds.size.width * (1.0 - self.faceCardScaleFactor),
+                                           self.bounds.size.height * (1.0 - self.faceCardScaleFactor));
+            [faceImage drawInRect:imageRect];
+        }else {
+             [self drawPips];
+        }
+        [self drawCorners];
+    } else {
+        UIImage *cardBackImage = [UIImage imageNamed:@"cardback"];
         CGRect imageRect = CGRectInset(self.bounds,
                                        self.bounds.size.width * (1.0 - self.faceCardScaleFactor),
                                        self.bounds.size.height * (1.0 - self.faceCardScaleFactor));
-        [faceImage drawInRect:imageRect];
-     } else {
-         NSLog(@"No faceImage Found");
-         [self drawPips];
-     }
-     [self drawCorners];
+        [cardBackImage drawInRect:imageRect];
+    }
 
 }
 
@@ -226,6 +230,12 @@
 - (void)setRank:(NSUInteger)rank
 {
     _rank = rank;
+    [self setNeedsDisplay];
+}
+
+- (void)setFaceUp:(BOOL)faceUp
+{
+    _faceUp = faceUp;
     [self setNeedsDisplay];
 }
 

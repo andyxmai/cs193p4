@@ -37,12 +37,6 @@
     [roundedRect stroke];
 }
 
-- (void)setFaceUp:(BOOL)faceUp
-{
-    _faceUp = faceUp;
-    [self setNeedsDisplay];
-}
-
 #pragma mark Initialization
 
 - (void)setup
