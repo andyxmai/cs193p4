@@ -203,6 +203,12 @@
     }
 }
 
+- (void)flipCardWithTouch:(UITapGestureRecognizer *)recognizer
+{
+    self.faceUp = !self.faceUp;
+    NSLog(@"Tapped");
+}
+
 #pragma mark Properties
 
 @synthesize faceCardScaleFactor = _faceCardScaleFactor;

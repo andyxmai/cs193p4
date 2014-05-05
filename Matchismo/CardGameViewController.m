@@ -44,13 +44,18 @@
             Card *card = [self.game cardAtIndex:counter];
             cardView.suit = ((PlayingCard *)card).suit;
             cardView.rank = ((PlayingCard *)card).rank;
-            cardView.faceUp = NO;
+            cardView.faceUp = card.isChosen;
+            
+            UITapGestureRecognizer *singleTapCardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:cardView action:@selector(flipCardWithTouch:)];
+            [singleTapCardGestureRecognizer setNumberOfTouchesRequired:1];
+            [cardView addGestureRecognizer:singleTapCardGestureRecognizer];
+            
             [self.cardsBoundaryView addSubview:cardView];
             [self.cardViews addObject:cardView];
+            
             counter++;
         }
     }
-
 }
 
 - (Grid *)cardGrid {
