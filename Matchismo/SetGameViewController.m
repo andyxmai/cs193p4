@@ -19,12 +19,6 @@
 {
     [super viewDidLoad];
     
-    Grid *cardGrid = [[Grid alloc] init];
-    cardGrid.cellAspectRatio = 0.5;
-    cardGrid.minimumNumberOfCells = 12;
-    cardGrid.size = self.cardsBoundaryView.bounds.size;
-    
-    
     [self updateUI];
 }
 

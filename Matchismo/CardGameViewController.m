@@ -17,9 +17,35 @@
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (strong, nonatomic) NSMutableArray *cardViews;
+@property (weak, nonatomic) IBOutlet UIView *cardsBoundaryView;
+@property (strong, nonatomic) Grid *cardGrid;
 @end
 
 @implementation CardGameViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    //Hard code count
+    
+    PlayingCardView *cardView = [[PlayingCardView alloc] initWithFrame:CGRectMake(100, 100, 100, 200)];
+    cardView.suit = @"♣︎";
+    cardView.rank = 12;
+    [self.cardsBoundaryView addSubview:cardView];
+}
+
+- (Grid *)cardGrid {
+    if (!_cardGrid) {
+        _cardGrid = [[Grid alloc] init];
+        _cardGrid.cellAspectRatio = 0.75;
+        _cardGrid.minimumNumberOfCells = 12;
+        _cardGrid.size = self.cardsBoundaryView.bounds.size;
+    }
+    
+    return _cardGrid;
+}
+
 
 /*
  Getter for game. Calls the custom init method if it has not been initialized.
@@ -28,7 +54,7 @@
 {
     if (!_game) {
         
-        _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
+        _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardViews count]
                                                           usingDeck:[self createDeck]];
     }
     

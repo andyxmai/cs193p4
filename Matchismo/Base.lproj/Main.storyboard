@@ -42,10 +42,9 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.50196081399917603" blue="0.25098040699958801" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" id="NiM-zR-RnK">
-                        <barButtonItem key="rightBarButtonItem" title="History" id="26y-Be-uns"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="NiM-zR-RnK"/>
                     <connections>
+                        <outlet property="cardsBoundaryView" destination="uEz-1U-EQe" id="nnx-Db-yN6"/>
                         <outlet property="scoreLabel" destination="rPl-B4-4jh" id="Uxp-m3-9dR"/>
                     </connections>
                 </viewController>
@@ -124,9 +123,7 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" id="Mzf-ss-AoP">
-                        <barButtonItem key="rightBarButtonItem" title="History" id="TZp-6v-gEn"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="Mzf-ss-AoP"/>
                     <connections>
                         <outlet property="cardsBoundaryView" destination="uEz-1U-EQe" id="PSb-XC-rd4"/>
                         <outlet property="scoreLabel" destination="3B7-rB-d1I" id="Owz-b9-8KE"/>
