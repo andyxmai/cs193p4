@@ -12,4 +12,8 @@
 @property (nonatomic, strong) NSString *suit;
 @property (nonatomic) NSUInteger rank;
 @property (nonatomic) BOOL faceUp;
+
+// Built-in Gesture Handler
+- (void)resizeFaceWithPinch:(UIPinchGestureRecognizer *)gesture;
+- (void)flipCardWithTouch:(UITapGestureRecognizer *)recognizer;
 @end

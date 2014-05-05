@@ -44,13 +44,41 @@
             Card *card = [self.game cardAtIndex:counter];
             cardView.suit = ((PlayingCard *)card).suit;
             cardView.rank = ((PlayingCard *)card).rank;
-            cardView.faceUp = YES;
+            cardView.faceUp = card.isChosen;
+            
+            UITapGestureRecognizer *singleTapCardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(flipCardWithTouch:)];
+            [singleTapCardGestureRecognizer setNumberOfTouchesRequired:1];
+            [cardView addGestureRecognizer:singleTapCardGestureRecognizer];
+            
             [self.cardsBoundaryView addSubview:cardView];
             [self.cardViews addObject:cardView];
+            
             counter++;
         }
     }
+}
 
+- (void)flipCardWithTouch:(UITapGestureRecognizer *)recognizer
+{
+    PlayingCardView *cardView = (PlayingCardView *)(recognizer.view);
+    cardView.faceUp = !cardView.faceUp;
+    int chosenCardViewIndex = [self.cardViews indexOfObject:cardView];
+    NSLog(@"%@",[NSString stringWithFormat:@"%d", chosenCardViewIndex]);
+    [self.game chooseCardAtIndex:chosenCardViewIndex];
+    
+    //[self populateCards];
+    
+    //NSLog(@"Tapped");
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+}
+
+- (NSMutableArray *)cardViews
+{
+    if (!_cardViews) {
+        _cardViews = [[NSMutableArray alloc] init];
+    }
+    
+    return _cardViews;
 }
 
 - (Grid *)cardGrid {
