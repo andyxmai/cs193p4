@@ -60,7 +60,7 @@
                                            self.bounds.size.height * (1.0 - self.faceCardScaleFactor));
             [faceImage drawInRect:imageRect];
         }else {
-            NSLog(@"Draw pips");
+            //NSLog(@"Draw pips");
             [self drawPips];
         }
         [self drawCorners];
