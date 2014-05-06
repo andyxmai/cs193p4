@@ -60,7 +60,8 @@
                                            self.bounds.size.height * (1.0 - self.faceCardScaleFactor));
             [faceImage drawInRect:imageRect];
         }else {
-             [self drawPips];
+            NSLog(@"Draw pips");
+            [self drawPips];
         }
         [self drawCorners];
     } else {
@@ -169,7 +170,7 @@
 
 - (void)drawPips
 {
-    
+    [self drawSquiggle:CGPointMake(10, 10) width:20 height:10];
 }
 
 #pragma mark Gestures
@@ -213,11 +214,6 @@
     [self setNeedsDisplay];
 }
 
-- (void)setFaceUp:(BOOL)faceUp
-{
-    _faceUp = faceUp;
-    [self setNeedsDisplay];
-}
 
 
 /*

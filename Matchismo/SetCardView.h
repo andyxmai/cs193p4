@@ -12,5 +12,9 @@
 //@property (nonatomic) NSInteger shape;
 @property (nonatomic, strong) NSString *suit;
 @property (nonatomic) NSUInteger rank;
-@property (nonatomic) BOOL faceUp;
+
+@property (strong, nonatomic) NSNumber *shape;
+@property (strong, nonatomic) NSNumber *count;
+@property (strong, nonatomic) NSNumber *color;
+@property (strong, nonatomic) NSNumber *shade;
 @end

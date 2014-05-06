@@ -17,8 +17,8 @@
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 
 @property (weak, nonatomic) IBOutlet UIView *cardsBoundaryView;
-@property (strong, nonatomic) Grid *cardGrid;
-@property (strong, nonatomic) NSMutableArray *cardViews;
+//@property (strong, nonatomic) Grid *cardGrid;
+//@property (strong, nonatomic) NSMutableArray *cardViews;
 
 
 @end
@@ -30,6 +30,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.cardViews = nil;
     [self populateCards];
 }
 
@@ -41,8 +43,19 @@
             CGPoint center = [self.cardGrid centerOfCellAtRow:i inColumn:j];
             CGRect frame = [self.cardGrid frameOfCellAtRow:i inColumn:j];
             SetCardView *cardView = [[SetCardView alloc] initWithFrame:frame];
-            cardView.center = center;
             Card *card = [self.game cardAtIndex:counter];
+            SetCard *setCard = (SetCard *)card;
+            cardView.center = center;
+            cardView.frame = frame;
+            cardView.shade = setCard.shade;
+            cardView.shape = setCard.shape;
+            cardView.color = setCard.color;
+            cardView.count = setCard.count;
+            
+            UITapGestureRecognizer *singleTapCardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(flipCardWithTouch:)];
+            [singleTapCardGestureRecognizer setNumberOfTouchesRequired:1];
+            [cardView addGestureRecognizer:singleTapCardGestureRecognizer];
+            
             cardView.faceUp = YES;
             [self.cardsBoundaryView addSubview:cardView];
             [self.cardViews addObject:cardView];
@@ -50,20 +63,6 @@
         }
     }
 }
-
-- (Grid *)cardGrid {
-    if (!_cardGrid) {
-        _cardGrid = [[Grid alloc] init];
-        _cardGrid.cellAspectRatio = 0.75;
-        _cardGrid.minimumNumberOfCells = NUM_START_CARDS;
-        _cardGrid.size = self.cardsBoundaryView.bounds.size;
-    }
-    
-    return _cardGrid;
-}
-
-
-
 
 /*
  Creates the deck by calling the custom init method PlayingCardDeck.
@@ -151,10 +150,6 @@
     
     return cardContents;
 }
-
-
-
-
 
 
 
