@@ -1,1 +1,8 @@
-user:andymai (Mai, Andy)
+user#1:andymai (Mai, Andy)
+user#2:naveenk1 (Krishnamurthi, Naveen)
+
+Naveen was responsible for the grahics portion of the application that involved drawing the set shapes and integrating aspects of the playing card code from lecture (ie. SuperCard/SuperCard 2). He was also responsible for coloring the pips, adding the animations that flip individual cards, and other minor aspects of the code.
+
+Andy was responsible for the grid layout, getting the autolayout working, most of the other animations (including dynamic animations), designing the base card view, and all of the handling for the mutable array of card views, removing cards, etc.
+
+We agree that the work was divided equally, and had a lot of fun working on this project.
