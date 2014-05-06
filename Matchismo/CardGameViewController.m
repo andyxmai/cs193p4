@@ -30,6 +30,13 @@
     [self populateCards];
 }
 
+-(void)removeAllViews{
+    for (UIView *view in [self.cardsBoundaryView subviews])
+    {
+        [view removeFromSuperview];
+    }
+}
+
 //reDeals the cards and restarts the game.
 - (IBAction)reDealButton:(UIButton *)sender {
     self.cardViews = nil;
@@ -63,8 +70,7 @@
             //cardView.faceUp = !([self.game cardAtIndex:counter].isChosen);
             
             [self.cardsBoundaryView addSubview:cardView];
-            //[self.cardViews addObject:cardView];
-            
+            //ADD THIS ^!!!!!!!
             counter++;
         }
     }
@@ -76,29 +82,25 @@
     cardView.faceUp = !cardView.faceUp;
     int chosenCardViewIndex = [self.cardViews indexOfObject:cardView];
     //NSLog(@"%@",[NSString stringWithFormat:@"%d", chosenCardViewIndex]);
-    [self.game chooseCardAtIndex:chosenCardViewIndex];
-    
+
+    [UIView transitionWithView:cardView
+                      duration:0.5
+                       options:UIViewAnimationOptionTransitionFlipFromRight
+                    animations:^{
+                        [self.game chooseCardAtIndex:chosenCardViewIndex];
+                        
+                    }
+                    completion:nil];
     [self populateCards];
     
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
-}
-
-
-- (void) initializeCardViews
-{
-    _cardViews = [[NSMutableArray alloc] init];
-    for (NSUInteger i = 0; i < NUM_START_CARDS; i++) {
-        PlayingCardView *cardView = [[PlayingCardView alloc] init];
-        Card *card = [self.game cardAtIndex:i];
-        cardView.suit = ((PlayingCard *)card).suit;
-        cardView.rank = ((PlayingCard *)card).rank;
-        cardView.faceUp = card.isChosen;
-        
-        UITapGestureRecognizer *singleTapCardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(flipCardWithTouch:)];
-        [singleTapCardGestureRecognizer setNumberOfTouchesRequired:1];
-        [cardView addGestureRecognizer:singleTapCardGestureRecognizer];
-        [_cardViews addObject:cardView];
-    }
+    
+    
+//    [self.game chooseCardAtIndex:chosenCardViewIndex];
+//    
+//    [self populateCards];
+//    
+//    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
 
 - (NSMutableArray *)cardViews
@@ -164,15 +166,6 @@
     [self.game chooseCardAtIndex:chosenButtonIndex];
     [self updateUI];
 }
-
-/*
- Button action to redeal and reset the game
- */
-- (IBAction)redealButton:(UIButton *)sender
-{
-    self.game = nil;
-    [self updateUI];
-  }
 
 /*
  Updates the UI to reflect which cards have been flipped and matched.
