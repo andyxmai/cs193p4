@@ -26,7 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.cardViews = nil;
+    //self.cardViews = nil;
     [self populateCards];
 }
 

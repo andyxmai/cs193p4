@@ -52,7 +52,7 @@
     NSUInteger row = 0;
     NSUInteger col = 0;
     
-    while (counter < self.cardGrid.minimumNumberOfCells) {
+    while (counter < [self.cardViews count]) {
         Card *card = [self.game cardAtIndex:counter];
         if (!card.isMatched) {
             if (col == self.cardGrid.columnCount) {
