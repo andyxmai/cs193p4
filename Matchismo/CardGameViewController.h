@@ -13,7 +13,6 @@
 @interface CardGameViewController : UIViewController
 
 @property (strong, nonatomic) Grid *cardGrid;
-@property (strong, nonatomic) NSMutableArray *cardViews;
 @property (weak, nonatomic) IBOutlet UIView *cardsBoundaryView;
 
 - (void)updateUI;

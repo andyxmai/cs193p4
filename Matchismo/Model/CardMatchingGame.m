@@ -11,6 +11,7 @@
 @interface CardMatchingGame()
 @property (nonatomic, readwrite) NSInteger score;
 @property (nonatomic, strong) NSMutableArray *cards;
+@property (nonatomic, strong) Deck *deck;
 @end
 
 @implementation CardMatchingGame
@@ -33,10 +34,12 @@
     self = [super init]; // super's designated initializer
     
     if (self) {
+        self.deck = deck;
         for (int i = 0; i < count; i++) {
             Card *card = [deck drawRandomCard];
             if (card) {
                 [self.cards addObject:card];
+                self.numCardsDrawn++;
             } else {
                 self = nil;
                 break;
@@ -45,6 +48,20 @@
     }
     
     return self;
+}
+
+- (void)addThreeCards
+{
+    int numCardAdded = 0;
+    
+    while (numCardAdded < 3) {
+        Card *card = [self.deck drawRandomCard];
+        if (![self.cards containsObject:card]) {
+            [self.cards addObject:card];
+            numCardAdded++;
+            self.numCardsDrawn++;
+        }
+    }
 }
 
 /*

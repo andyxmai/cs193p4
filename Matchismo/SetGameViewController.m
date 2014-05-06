@@ -15,6 +15,7 @@
 @interface SetGameViewController ()
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
+@property (strong, nonatomic) NSMutableArray *cardViews;
 
 @property (weak, nonatomic) IBOutlet UIView *cardsBoundaryView;
 //@property (strong, nonatomic) Grid *cardGrid;
@@ -31,39 +32,125 @@
 {
     [super viewDidLoad];
     
-    self.cardViews = nil;
     [self populateCards];
+}
+
+- (void)removeAllCardViews
+{
+    for (UIView *v in self.cardViews) {
+        [v removeFromSuperview];
+    }
 }
 
 - (void)populateCards
 {
+    //NSLog(@"populate cards");
+    //NSLog(@"%@",[NSString stringWithFormat:@"%d, %d, %d",self.cardGrid.minimumNumberOfCells, self.cardGrid.rowCount, self.cardGrid.columnCount]);
+    
+    [self removeAllCardViews];
     NSUInteger counter = 0;
-    for (NSUInteger i = 0; i < self.cardGrid.rowCount; i++) {
-        for (NSUInteger j = 0; j < self.cardGrid.columnCount; j++) {
-            CGPoint center = [self.cardGrid centerOfCellAtRow:i inColumn:j];
-            CGRect frame = [self.cardGrid frameOfCellAtRow:i inColumn:j];
-            SetCardView *cardView = [[SetCardView alloc] initWithFrame:frame];
-            Card *card = [self.game cardAtIndex:counter];
+    NSUInteger row = 0;
+    NSUInteger col = 0;
+    
+    while (counter < self.cardGrid.minimumNumberOfCells) {
+        Card *card = [self.game cardAtIndex:counter];
+        if (!card.isMatched) {
+            if (col == self.cardGrid.columnCount) {
+                row++;
+                col = 0;
+            }
+            
+            CGPoint center = [self.cardGrid centerOfCellAtRow:row inColumn:col];
+            CGRect frame = [self.cardGrid frameOfCellAtRow:row inColumn:col];
 
-            SetCard *setCard = (SetCard *)card;
+            SetCardView *cardView = [self.cardViews objectAtIndex:counter];
             cardView.center = center;
             cardView.frame = frame;
+            
+            [self.cardsBoundaryView addSubview:cardView];
+            col++;
+        } else {
+            NSLog(@"%@",[NSString stringWithFormat:@"%d",counter]);
+        }
+    
+        counter++;
+    }
+}
+
+- (IBAction)dealCards:(UIButton *)sender {
+    NSLog(@"deal");
+    [self.game addThreeCards];
+    
+    for (NSUInteger i = 0; i < 3; i++) {
+        Card *card = [self.game cardAtIndex:(self.game.numCardsDrawn-1-i)];
+        SetCardView *cardView = [[SetCardView alloc] init];
+        SetCard *setCard = (SetCard *)card;
+        cardView.shade = setCard.shade;
+        cardView.shape = setCard.shape;
+        cardView.color = setCard.color;
+        cardView.count = setCard.count;
+        cardView.faceUp = !card.isChosen;
+        
+        UITapGestureRecognizer *singleTapCardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(flipCardWithTouch:)];
+        [singleTapCardGestureRecognizer setNumberOfTouchesRequired:1];
+        [cardView addGestureRecognizer:singleTapCardGestureRecognizer];
+        
+        [self.cardViews addObject:cardView];
+    }
+    
+    [self populateCards];
+}
+
+- (NSMutableArray *)cardViews
+{
+    if (!_cardViews) {
+        _cardViews = [[NSMutableArray alloc] init];
+        for (NSUInteger i = 0; i < NUM_START_CARDS; i++) {
+            SetCardView *cardView = [[SetCardView alloc] init];
+            Card *card = [self.game cardAtIndex:i];
+            SetCard *setCard = (SetCard *)card;
             cardView.shade = setCard.shade;
             cardView.shape = setCard.shape;
             cardView.color = setCard.color;
             cardView.count = setCard.count;
+            cardView.faceUp = !card.isChosen;
             
             UITapGestureRecognizer *singleTapCardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(flipCardWithTouch:)];
             [singleTapCardGestureRecognizer setNumberOfTouchesRequired:1];
             [cardView addGestureRecognizer:singleTapCardGestureRecognizer];
             
-            cardView.faceUp = YES;
-            [self.cardsBoundaryView addSubview:cardView];
-            [self.cardViews addObject:cardView];
-            counter++;
+            [_cardViews addObject:cardView];
+            //[self.cardsBoundaryView addSubview:cardView];
         }
     }
+    
+    return _cardViews;
 }
+
+- (void)flipCardWithTouch:(UITapGestureRecognizer *)recognizer
+{
+    CardView *cardView = (CardView *)(recognizer.view);
+    cardView.faceUp = !cardView.faceUp;
+    int chosenCardViewIndex = [self.cardViews indexOfObject:cardView];
+    //NSLog(@"%@",[NSString stringWithFormat:@"%d", chosenCardViewIndex]);
+    [self.game chooseCardAtIndex:chosenCardViewIndex];
+    
+//    if (self.game.scoreDiff != 0) {
+//        NSLog(@"matched");
+//        for (Card *card in self.game.currentCards) {
+//            card.matched = YES;
+//        }
+//    }
+    
+    if (self.game.scoreDiff > 0) {
+        NSLog(@"matched");
+    }
+    
+    [self populateCards];
+     
+    //self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+}
+
 
 /*
  Creates the deck by calling the custom init method PlayingCardDeck.

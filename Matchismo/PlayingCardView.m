@@ -70,6 +70,8 @@
                                        self.bounds.size.height * (1.0 - self.faceCardScaleFactor));
         [cardBackImage drawInRect:imageRect];
     }
+    
+    self.cellAspectRatio = self.bounds.size.width/self.bounds.size.height;
 
 }
 

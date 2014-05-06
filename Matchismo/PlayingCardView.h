@@ -11,6 +11,7 @@
 @interface PlayingCardView : CardView
 @property (nonatomic, strong) NSString *suit;
 @property (nonatomic) NSUInteger rank;
+@property (nonatomic) CGFloat cellAspectRatio;
 
 // Built-in Gesture Handler
 - (void)resizeFaceWithPinch:(UIPinchGestureRecognizer *)gesture;
