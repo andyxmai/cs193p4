@@ -17,4 +17,5 @@
 
 - (void)updateUI;
 - (void)flipCardWithTouch:(UITapGestureRecognizer *)recognizer;
+- (void)removeAllCardViews;
 @end

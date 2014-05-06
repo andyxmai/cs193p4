@@ -32,11 +32,21 @@
 
 //reDeals the cards and restarts the game.
 - (IBAction)reDealButton:(UIButton *)sender {
+    
+    [self removeAllCardViews];
     self.cardViews = nil;
     self.game = nil;
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
     self.cardGrid = nil;
+    
     [self populateCards];
+}
+
+- (void)removeAllCardViews
+{
+    for (UIView *v in self.cardViews) {
+        [v removeFromSuperview];
+    }
 }
 
 - (void)populateCards
