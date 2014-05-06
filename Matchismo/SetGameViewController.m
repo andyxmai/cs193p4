@@ -129,13 +129,6 @@
     NSLog(@"%@",[NSString stringWithFormat:@"%d", chosenCardViewIndex]);
     [self.game chooseCardAtIndex:chosenCardViewIndex];
     
-//    if (self.game.scoreDiff != 0) {
-//        NSLog(@"matched");
-//        for (Card *card in self.game.currentCards) {
-//            card.matched = YES;
-//        }
-//    }
-    
     if (self.game.scoreDiff > 0) {
         self.cardGrid.minimumNumberOfCells -= 3;
         NSLog(@"matched");
