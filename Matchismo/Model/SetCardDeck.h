@@ -11,4 +11,5 @@
 
 @interface SetCardDeck : Deck
 
++ (NSUInteger)totalNumCards;
 @end

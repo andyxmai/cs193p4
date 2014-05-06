@@ -50,12 +50,14 @@
     return self;
 }
 
+/* Adds three cards to the cards array when dealing new cards */
 - (void)addThreeCards
 {
     int numCardAdded = 0;
     
     while (numCardAdded < 3) {
         Card *card = [self.deck drawRandomCard];
+        if (!card) return;
         if (![self.cards containsObject:card]) {
             [self.cards addObject:card];
             numCardAdded++;
@@ -72,6 +74,7 @@
     return (index<[self.cards count]) ? self.cards[index] : nil;
 }
 
+/* Helper method to return the index of a card in the game */
 - (NSUInteger)indexForCard:(Card *)card
 {
     if ([self.cards containsObject:card]) {

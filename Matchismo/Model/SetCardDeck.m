@@ -38,4 +38,9 @@
     return self;
 }
 
+/* Returns total number of cards in deck */
++ (NSUInteger)totalNumCards {
+    return [[SetCard validColors] count]*[[SetCard validCounts] count]*[[SetCard validShades] count]*[[SetCard validShapes] count];
+}
+
 @end

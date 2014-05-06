@@ -32,6 +32,7 @@
     [self populateCardsWithAnimation:NO];
 }
 
+/* Draws and allocates the card views to the superview using the grid. It can animate and does not draw matched cards */
 - (void)populateCardsWithAnimation:(BOOL)animate
 {
     [self removeAllCardViews];
@@ -72,30 +73,33 @@
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
 
+/* Deals an extra 3 cards to the board */
 - (IBAction)dealCards:(UIButton *)sender {
-    [self.game addThreeCards];
-    
-    for (NSUInteger i = 3; i > 0; i--) {
-        Card *card = [self.game cardAtIndex:(self.game.numCardsDrawn-i)];
-        SetCardView *cardView = [[SetCardView alloc] init];
-        SetCard *setCard = (SetCard *)card;
-        cardView.shade = setCard.shade;
-        cardView.shape = setCard.shape;
-        cardView.color = setCard.color;
-        cardView.count = setCard.count;
-        cardView.faceUp = !card.isChosen;
+    if (self.game.numCardsDrawn <= [SetCardDeck totalNumCards]) {
+        [self.game addThreeCards];
+        for (NSUInteger i = 3; i > 0; i--) {
+            Card *card = [self.game cardAtIndex:(self.game.numCardsDrawn-i)];
+            SetCardView *cardView = [[SetCardView alloc] init];
+            SetCard *setCard = (SetCard *)card;
+            cardView.shade = setCard.shade;
+            cardView.shape = setCard.shape;
+            cardView.color = setCard.color;
+            cardView.count = setCard.count;
+            cardView.faceUp = !card.isChosen;
+            
+            UITapGestureRecognizer *singleTapCardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(flipCardWithTouch:)];
+            [singleTapCardGestureRecognizer setNumberOfTouchesRequired:1];
+            [cardView addGestureRecognizer:singleTapCardGestureRecognizer];
+            
+            [self.cardViews addObject:cardView];
+        }
         
-        UITapGestureRecognizer *singleTapCardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(flipCardWithTouch:)];
-        [singleTapCardGestureRecognizer setNumberOfTouchesRequired:1];
-        [cardView addGestureRecognizer:singleTapCardGestureRecognizer];
-        
-        [self.cardViews addObject:cardView];
+        self.cardGrid.minimumNumberOfCells += 3;
+        [self populateCardsWithAnimation:YES];
     }
-    
-    self.cardGrid.minimumNumberOfCells += 3;
-    [self populateCardsWithAnimation:YES];
 }
 
+/* Setter for cardViews */
 - (NSMutableArray *)cardViews
 {
     if (!_cardViews) {
@@ -122,6 +126,7 @@
     return _cardViews;
 }
 
+/* Helper method to get the card view that corresponds to the card given */
 - (NSMutableArray *)getCardViewsFromCards:(NSMutableArray *)cards
 {
     NSMutableArray *cardViews = [[NSMutableArray alloc] init];
@@ -138,6 +143,7 @@
     return cardViews;
 }
 
+/* handler for tapping the card */
 - (void)flipCardWithTouch:(UITapGestureRecognizer *)recognizer
 {
     if (!self.animator) {

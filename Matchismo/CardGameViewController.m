@@ -27,12 +27,14 @@
     [self populateCardsWithAnimation:NO];
 }
 
+/* Handles the rotation */
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     self.cardGrid.size = self.cardsBoundaryView.bounds.size;
     [self populateCardsWithAnimation:NO];
 }
 
+/* Removes all the card views */
 -(void)removeAllCardViews
 {
     for (UIView *view in [self.cardsBoundaryView subviews]) {
@@ -139,6 +141,7 @@
     return _cardViews;
 }
 
+/* Setter for cardGrid. It lazily sets the grid specs */
 - (Grid *)cardGrid {
     if (!_cardGrid) {
         _cardGrid = [[Grid alloc] init];
@@ -149,6 +152,8 @@
     
     return _cardGrid;
 }
+
+/* Pinch gesture to stack the cards */
 - (IBAction)gatherCardsWithPinch:(UIPinchGestureRecognizer *)gesture {
     if ((gesture.state == UIGestureRecognizerStateChanged) ||
         (gesture.state == UIGestureRecognizerStateEnded)) {
@@ -163,6 +168,7 @@
     }
 }
 
+/* Panning gesture handler to move the cards */
 - (IBAction)moveCardsWithPan:(UIPanGestureRecognizer *)gesture {
     if (self.animator) {
         CGPoint point = [gesture locationInView:self.cardsBoundaryView];
