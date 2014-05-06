@@ -63,7 +63,7 @@
             [self.cardsBoundaryView addSubview:cardView];
             col++;
         } else {
-            NSLog(@"%@",[NSString stringWithFormat:@"%d",counter]);
+            //NSLog(@"%@",[NSString stringWithFormat:@"%d",counter]);
         }
     
         counter++;
