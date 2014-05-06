@@ -53,26 +53,26 @@
     NSUInteger col = 0;
     
     while (counter < self.cardGrid.minimumNumberOfCells) {
-        if (col == self.cardGrid.columnCount) {
-            row++;
-            col = 0;
-        }
-        
-        CGPoint center = [self.cardGrid centerOfCellAtRow:row inColumn:col];
-        CGRect frame = [self.cardGrid frameOfCellAtRow:row inColumn:col];
-       
         Card *card = [self.game cardAtIndex:counter];
         if (!card.isMatched) {
+            if (col == self.cardGrid.columnCount) {
+                row++;
+                col = 0;
+            }
+            
+            CGPoint center = [self.cardGrid centerOfCellAtRow:row inColumn:col];
+            CGRect frame = [self.cardGrid frameOfCellAtRow:row inColumn:col];
+
             SetCardView *cardView = [self.cardViews objectAtIndex:counter];
             cardView.center = center;
             cardView.frame = frame;
             
             [self.cardsBoundaryView addSubview:cardView];
+            col++;
         } else {
             NSLog(@"%@",[NSString stringWithFormat:@"%d",counter]);
         }
     
-        col++;
         counter++;
     }
 }
