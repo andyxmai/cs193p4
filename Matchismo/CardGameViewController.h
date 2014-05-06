@@ -14,6 +14,7 @@
 
 @property (strong, nonatomic) Grid *cardGrid;
 @property (weak, nonatomic) IBOutlet UIView *cardsBoundaryView;
+@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 
 - (void)updateUI;
 - (void)flipCardWithTouch:(UITapGestureRecognizer *)recognizer;

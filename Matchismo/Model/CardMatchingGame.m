@@ -72,6 +72,15 @@
     return (index<[self.cards count]) ? self.cards[index] : nil;
 }
 
+- (NSUInteger)indexForCard:(Card *)card
+{
+    if ([self.cards containsObject:card]) {
+        return [self.cards indexOfObject:card];
+    } else {
+        return INT_MAX;
+    }
+}
+
 /*
  Multipliers and constants for score keeping
  */

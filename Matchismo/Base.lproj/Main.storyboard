@@ -142,7 +142,7 @@
                     <navigationItem key="navigationItem" id="Mzf-ss-AoP"/>
                     <connections>
                         <outlet property="cardsBoundaryView" destination="eHZ-Ae-87J" id="FO4-aO-WNb"/>
-                        <outlet property="scoreLabel" destination="3B7-rB-d1I" id="Owz-b9-8KE"/>
+                        <outlet property="scoreLabel" destination="3B7-rB-d1I" id="2r1-8I-Whg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6YR-8u-Spa" sceneMemberID="firstResponder"/>

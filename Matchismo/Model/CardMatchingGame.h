@@ -17,6 +17,7 @@
                         usingDeck:(Deck *)deck;
 - (void)chooseCardAtIndex:(NSUInteger)index;
 - (Card *)cardAtIndex:(NSUInteger)index;
+- (NSUInteger)indexForCard:(Card *)card;
 - (void)addThreeCards;
 
 @property (nonatomic, readonly) NSInteger score; // current score of the game

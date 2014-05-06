@@ -32,10 +32,10 @@
 {
     [super viewDidLoad];
     
-    [self populateCards];
+    [self populateCardsWithAnimation:NO];
 }
 
-- (void)populateCards
+- (void)populateCardsWithAnimation:(BOOL)animate
 {
     //NSLog(@"populate cards");
     //NSLog(@"%@",[NSString stringWithFormat:@"%d, %d, %d",self.cardGrid.minimumNumberOfCells, self.cardGrid.rowCount, self.cardGrid.columnCount]);
@@ -59,8 +59,18 @@
             SetCardView *cardView = [self.cardViews objectAtIndex:counter];
             cardView.center = center;
             cardView.frame = frame;
+            cardView.faceUp = !card.isChosen;
             
-            [self.cardsBoundaryView addSubview:cardView];
+            if (animate) {
+                [UIView transitionWithView:self.cardsBoundaryView
+                                  duration:0.5
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^ { [self.cardsBoundaryView addSubview:cardView]; }
+                                completion:nil];
+            } else {
+                [self.cardsBoundaryView addSubview:cardView];
+            }
+            
             col++;
         } else {
             //NSLog(@"%@",[NSString stringWithFormat:@"%d",counter]);
@@ -68,6 +78,7 @@
     
         counter++;
     }
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
 
 - (IBAction)dealCards:(UIButton *)sender {
@@ -76,6 +87,7 @@
     
     for (NSUInteger i = 0; i < 3; i++) {
         Card *card = [self.game cardAtIndex:(self.game.numCardsDrawn-1-i)];
+        NSLog(@"%d", self.game.numCardsDrawn);
         SetCardView *cardView = [[SetCardView alloc] init];
         SetCard *setCard = (SetCard *)card;
         cardView.shade = setCard.shade;
@@ -92,7 +104,7 @@
     }
     
     self.cardGrid.minimumNumberOfCells += 3;
-    [self populateCards];
+    [self populateCardsWithAnimation:YES];
 }
 
 - (NSMutableArray *)cardViews
@@ -121,6 +133,22 @@
     return _cardViews;
 }
 
+- (NSMutableArray *)getCardViewsFromCards:(NSMutableArray *)cards
+{
+    NSMutableArray *cardViews = [[NSMutableArray alloc] init];
+    for (Card *card in cards) {
+        SetCardView *cardView = [[SetCardView alloc] init];
+        NSUInteger cardIndex = [self.game indexForCard:card];
+        
+        if (cardIndex != INT_MAX) {
+            cardView = [self.cardViews objectAtIndex:cardIndex];
+        }
+        [cardViews addObject:cardView];
+    }
+    
+    return cardViews;
+}
+
 - (void)flipCardWithTouch:(UITapGestureRecognizer *)recognizer
 {
     CardView *cardView = (CardView *)(recognizer.view);
@@ -132,9 +160,19 @@
     if (self.game.scoreDiff > 0) {
         self.cardGrid.minimumNumberOfCells -= 3;
         NSLog(@"matched");
+       
+        NSMutableArray *cardViews = [self getCardViewsFromCards:self.game.currentCards];
+        
+        for (SetCardView *cardView in cardViews) {
+            [UIView transitionWithView:self.cardsBoundaryView
+                              duration:0.5
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^ { [cardView removeFromSuperview]; }
+                            completion:nil];
+        }
     }
     
-    [self populateCards];
+    [self populateCardsWithAnimation:NO];
      
     //self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }

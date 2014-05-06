@@ -15,7 +15,6 @@
 @interface CardGameViewController ()
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
-@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (strong, nonatomic) NSMutableArray *cardViews;
 @end
 
@@ -27,7 +26,7 @@
 {
     [super viewDidLoad];
     //self.cardViews = nil;
-    [self populateCards];
+    [self populateCards:NO];
 }
 
 -(void)removeAllCardViews
@@ -46,10 +45,10 @@
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
     self.cardGrid = nil;
     
-    [self populateCards];
+    [self populateCards:YES];
 }
 
-- (void)populateCards
+- (void)populateCards:(BOOL)animate
 {
     NSUInteger counter = 0;
     for (NSUInteger i = 0; i < self.cardGrid.rowCount; i++) {
@@ -72,7 +71,15 @@
             cardView.frame = frame;
             //cardView.faceUp = !([self.game cardAtIndex:counter].isChosen);
             
-            [self.cardsBoundaryView addSubview:cardView];
+            if (animate) {
+                [UIView transitionWithView:self.cardsBoundaryView
+                              duration:0.5
+                               options:UIViewAnimationOptionTransitionCurlUp
+                            animations:^ { [self.cardsBoundaryView addSubview:cardView]; }
+                            completion:nil];
+            } else {
+                [self.cardsBoundaryView addSubview:cardView];
+            }
             //ADD THIS ^!!!!!!!
             counter++;
         }
@@ -94,7 +101,7 @@
                         
                     }
                     completion:nil];
-    [self populateCards];
+    [self populateCards:NO];
     
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
     
