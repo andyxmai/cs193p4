@@ -13,5 +13,4 @@
 @property (strong, nonatomic) NSNumber *count;
 @property (strong, nonatomic) NSNumber *color;
 @property (strong, nonatomic) NSNumber *shade;
-@property (nonatomic) BOOL faceUp;
 @end

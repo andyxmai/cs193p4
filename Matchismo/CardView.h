@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface CardView : UIView
+@property (nonatomic) BOOL faceUp;
 
 @end

@@ -16,9 +16,6 @@
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
-@property (strong, nonatomic) NSMutableArray *cardViews;
-@property (weak, nonatomic) IBOutlet UIView *cardsBoundaryView;
-@property (strong, nonatomic) Grid *cardGrid;
 @end
 
 @implementation CardGameViewController
@@ -28,6 +25,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.cardViews = nil;
     
     [self populateCards];
 }
@@ -60,7 +58,7 @@
 
 - (void)flipCardWithTouch:(UITapGestureRecognizer *)recognizer
 {
-    PlayingCardView *cardView = (PlayingCardView *)(recognizer.view);
+    CardView *cardView = (CardView *)(recognizer.view);
     cardView.faceUp = !cardView.faceUp;
     int chosenCardViewIndex = [self.cardViews indexOfObject:cardView];
     NSLog(@"%@",[NSString stringWithFormat:@"%d", chosenCardViewIndex]);

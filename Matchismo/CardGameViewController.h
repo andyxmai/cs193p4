@@ -12,6 +12,10 @@
 
 @interface CardGameViewController : UIViewController
 
-- (void)updateUI;
+@property (strong, nonatomic) Grid *cardGrid;
+@property (strong, nonatomic) NSMutableArray *cardViews;
+@property (weak, nonatomic) IBOutlet UIView *cardsBoundaryView;
 
+- (void)updateUI;
+- (void)flipCardWithTouch:(UITapGestureRecognizer *)recognizer;
 @end

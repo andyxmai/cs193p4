@@ -217,7 +217,6 @@
     CGContextRestoreGState(UIGraphicsGetCurrentContext());
 }
 
-
 #pragma mark Gestures
 
 - (void)resizeFaceWithPinch:(UIPinchGestureRecognizer *)gesture
@@ -247,18 +246,11 @@
     [self setNeedsDisplay];
 }
 
-- (void)setFaceUp:(BOOL)faceUp
-{
-    _faceUp = faceUp;
-    [self setNeedsDisplay];
-}
-
 - (void)setShape:(NSNumber *)shape
 {
     _shape = shape;
     [self setNeedsDisplay];
 }
-
 
 /*
 // Only override drawRect: if you perform custom drawing.

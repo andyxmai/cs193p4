@@ -194,8 +194,6 @@
 		63044AB418F1E5C60056099D /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				018DA3411917677400F78C47 /* SetCardView.h */,
-				018DA3421917677400F78C47 /* SetCardView.m */,
 				6329D97918F899040009D9D7 /* CardMatchingGame.h */,
 				6329D97A18F899040009D9D7 /* CardMatchingGame.m */,
 				63044AB118F1E5970056099D /* Card.h */,
@@ -216,6 +214,8 @@
 				638715F91916F9A9008C2849 /* CardView.m */,
 				638715FB1916FB4E008C2849 /* PlayingCardView.h */,
 				638715FC1916FB4E008C2849 /* PlayingCardView.m */,
+				018DA3411917677400F78C47 /* SetCardView.h */,
+				018DA3421917677400F78C47 /* SetCardView.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
