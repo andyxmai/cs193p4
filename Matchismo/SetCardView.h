@@ -9,10 +9,6 @@
 #import "CardView.h"
 
 @interface SetCardView : CardView
-//@property (nonatomic) NSInteger shape;
-@property (nonatomic, strong) NSString *suit;
-@property (nonatomic) NSUInteger rank;
-
 @property (strong, nonatomic) NSNumber *shape;
 @property (strong, nonatomic) NSNumber *count;
 @property (strong, nonatomic) NSNumber *color;

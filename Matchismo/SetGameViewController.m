@@ -27,7 +27,7 @@
 
 @implementation SetGameViewController
 
-#define NUM_START_CARDS 12
+#define NUM_START_CARDS 24
 
 - (void)viewDidLoad
 {
@@ -48,61 +48,44 @@
 
 - (void)populateCards
 {
-    NSLog(@"populate cards");
-    NSLog(@"%@",[NSString stringWithFormat:@"%d, %d, %d",self.cardGrid.minimumNumberOfCells, self.cardGrid.rowCount, self.cardGrid.columnCount]);
+    //NSLog(@"populate cards");
+    //NSLog(@"%@",[NSString stringWithFormat:@"%d, %d, %d",self.cardGrid.minimumNumberOfCells, self.cardGrid.rowCount, self.cardGrid.columnCount]);
     
     [self removeAllCardViews];
     NSUInteger counter = 0;
     NSUInteger row = 0;
     NSUInteger col = 0;
-    for (NSUInteger i = 0; i < [self.cardViews count]; i++) {
-        if (counter < self.cardGrid.minimumNumberOfCells) {
-            if (col == self.cardGrid.columnCount) {
-                row++;
-                col = 0;
-            }
-            
-            CGPoint center = [self.cardGrid centerOfCellAtRow:row inColumn:col];
-            CGRect frame = [self.cardGrid frameOfCellAtRow:row inColumn:col];
-           
-            Card *card = [self.game cardAtIndex:counter];
-            if (!card.isMatched) {
-                SetCardView *cardView = [self.cardViews objectAtIndex:counter];
-                cardView.center = center;
-                cardView.frame = frame;
-                
-                [self.cardsBoundaryView addSubview:cardView];
-            }
-        
-            col++;
+    
+    while (counter < self.cardGrid.minimumNumberOfCells) {
+        if (col == self.cardGrid.columnCount) {
+            row++;
+            col = 0;
         }
+        
+        CGPoint center = [self.cardGrid centerOfCellAtRow:row inColumn:col];
+        CGRect frame = [self.cardGrid frameOfCellAtRow:row inColumn:col];
+       
+        Card *card = [self.game cardAtIndex:counter];
+        if (!card.isMatched) {
+            SetCardView *cardView = [self.cardViews objectAtIndex:counter];
+            cardView.center = center;
+            cardView.frame = frame;
+            
+            [self.cardsBoundaryView addSubview:cardView];
+        } else {
+            NSLog(@"%@",[NSString stringWithFormat:@"%d",counter]);
+        }
+    
+        col++;
         counter++;
     }
-  
-//    for (NSUInteger i = 0; i < self.cardGrid.rowCount; i++) {
-//        for (NSUInteger j = 0; j < self.cardGrid.columnCount; j++) {
-//            CGPoint center = [self.cardGrid centerOfCellAtRow:i inColumn:j];
-//            CGRect frame = [self.cardGrid frameOfCellAtRow:i inColumn:j];
-//            
-//            Card *card = [self.game cardAtIndex:counter];
-//            
-//            if (!card.isMatched) {
-//                SetCardView *cardView = [self.cardViews objectAtIndex:counter];
-//                cardView.center = center;
-//                cardView.frame = frame;
-//                
-//                [self.cardsBoundaryView addSubview:cardView];
-//            }
-//            counter++;
-//        }
-//    }
 }
 
 - (NSMutableArray *)cardViews
 {
     if (!_cardViews) {
         _cardViews = [[NSMutableArray alloc] init];
-        for (NSUInteger i = 0; i < NUM_START_CARDS; i++) {
+        for (NSUInteger i = 0; i < 24; i++) {
             SetCardView *cardView = [[SetCardView alloc] init];
             Card *card = [self.game cardAtIndex:i];
             SetCard *setCard = (SetCard *)card;
@@ -129,16 +112,19 @@
     CardView *cardView = (CardView *)(recognizer.view);
     cardView.faceUp = !cardView.faceUp;
     int chosenCardViewIndex = [self.cardViews indexOfObject:cardView];
-    NSLog(@"%@",[NSString stringWithFormat:@"%d", chosenCardViewIndex]);
+    //NSLog(@"%@",[NSString stringWithFormat:@"%d", chosenCardViewIndex]);
     [self.game chooseCardAtIndex:chosenCardViewIndex];
     
-    if (self.game.scoreDiff != 0) {
+//    if (self.game.scoreDiff != 0) {
+//        NSLog(@"matched");
+//        for (Card *card in self.game.currentCards) {
+//            card.matched = YES;
+//        }
+//    }
+    
+    if (self.game.scoreDiff > 0) {
         NSLog(@"matched");
-        for (Card *card in self.game.currentCards) {
-            card.matched = YES;
-        }
-        self.cardGrid.minimumNumberOfCells -= 3;
-   }
+    }
     
     [self populateCards];
     
@@ -244,7 +230,7 @@
 {
     if (!_game) {
         
-        _game = [[CardMatchingGame alloc] initWithCardCount:NUM_START_CARDS
+        _game = [[CardMatchingGame alloc] initWithCardCount:24
                                                   usingDeck:[self createDeck]];
     }
     
