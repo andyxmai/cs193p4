@@ -32,13 +32,10 @@
 
 //reDeals the cards and restarts the game.
 - (IBAction)reDealButton:(UIButton *)sender {
-    self.cardViews =[[NSMutableArray alloc] init];
-    self.game = [[CardMatchingGame alloc] initWithCardCount:NUM_START_CARDS usingDeck:[self createDeck]];
+    self.cardViews = nil;
+    self.game = nil;
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
-    self.cardGrid = [[Grid alloc] init];
-    self.cardGrid.cellAspectRatio = 0.75;
-    self.cardGrid.minimumNumberOfCells = NUM_START_CARDS;
-    self.cardGrid.size = self.cardsBoundaryView.bounds.size;
+    self.cardGrid = nil;
     [self populateCards];
 }
 
@@ -84,6 +81,24 @@
     [self populateCards];
     
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+}
+
+
+- (void) initializeCardViews
+{
+    _cardViews = [[NSMutableArray alloc] init];
+    for (NSUInteger i = 0; i < NUM_START_CARDS; i++) {
+        PlayingCardView *cardView = [[PlayingCardView alloc] init];
+        Card *card = [self.game cardAtIndex:i];
+        cardView.suit = ((PlayingCard *)card).suit;
+        cardView.rank = ((PlayingCard *)card).rank;
+        cardView.faceUp = card.isChosen;
+        
+        UITapGestureRecognizer *singleTapCardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(flipCardWithTouch:)];
+        [singleTapCardGestureRecognizer setNumberOfTouchesRequired:1];
+        [cardView addGestureRecognizer:singleTapCardGestureRecognizer];
+        [_cardViews addObject:cardView];
+    }
 }
 
 - (NSMutableArray *)cardViews
