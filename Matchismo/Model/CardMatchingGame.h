@@ -17,10 +17,12 @@
                         usingDeck:(Deck *)deck;
 - (void)chooseCardAtIndex:(NSUInteger)index;
 - (Card *)cardAtIndex:(NSUInteger)index;
+- (void)addThreeCards;
 
 @property (nonatomic, readonly) NSInteger score; // current score of the game
 @property (nonatomic, strong) NSString *lastResult; // Stores the string to diplay for the result label in the UI
 @property (nonatomic) int scoreDiff;
 @property (nonatomic, strong) NSMutableArray *currentCards;
+@property (nonatomic) NSUInteger numCardsDrawn;
 
 @end

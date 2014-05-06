@@ -77,6 +77,30 @@
     }
 }
 
+- (IBAction)dealCards:(UIButton *)sender {
+    NSLog(@"deal");
+    [self.game addThreeCards];
+    
+    for (NSUInteger i = 0; i < 3; i++) {
+        Card *card = [self.game cardAtIndex:(self.game.numCardsDrawn-1-i)];
+        SetCardView *cardView = [[SetCardView alloc] init];
+        SetCard *setCard = (SetCard *)card;
+        cardView.shade = setCard.shade;
+        cardView.shape = setCard.shape;
+        cardView.color = setCard.color;
+        cardView.count = setCard.count;
+        cardView.faceUp = !card.isChosen;
+        
+        UITapGestureRecognizer *singleTapCardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(flipCardWithTouch:)];
+        [singleTapCardGestureRecognizer setNumberOfTouchesRequired:1];
+        [cardView addGestureRecognizer:singleTapCardGestureRecognizer];
+        
+        [self.cardViews addObject:cardView];
+    }
+    
+    [self populateCards];
+}
+
 - (NSMutableArray *)cardViews
 {
     if (!_cardViews) {
