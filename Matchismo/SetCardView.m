@@ -59,28 +59,24 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    [super drawRect:rect];
-    
-    if (self.faceUp) {
-//        NSString *imageName = [NSString stringWithFormat:@""];
-//        UIImage *faceImage = [UIImage imageNamed:imageName];
-//        if (faceImage) {
-//            CGRect imageRect = CGRectInset(self.bounds,
-//                                           self.bounds.size.width * (1.0 - self.faceCardScaleFactor),
-//                                           self.bounds.size.height * (1.0 - self.faceCardScaleFactor));
-//            [faceImage drawInRect:imageRect];
-//        }
-        [self drawCorners];
-        [self drawShapes];
-    } else {
-        UIImage *cardBackImage = [UIImage imageNamed:@"cardback"];
-        CGRect imageRect = CGRectInset(self.bounds,
-                                       self.bounds.size.width * (1.0 - self.faceCardScaleFactor),
-                                       self.bounds.size.height * (1.0 - self.faceCardScaleFactor));
-        [cardBackImage drawInRect:imageRect];
+    if (self.faceUp) [super drawRect:rect];
+    else{
+        UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:[self  cornerRadius]];
+        [roundedRect addClip];
+        [[UIColor grayColor] setFill];
+        UIRectFill(self.bounds);
+        [[UIColor blackColor] setStroke];
+        [roundedRect stroke];
     }
-
+    [self drawCorners];
+    [self drawShapes];
 }
+
+
+
+
+
+
 
 - (void)drawCorners
 {

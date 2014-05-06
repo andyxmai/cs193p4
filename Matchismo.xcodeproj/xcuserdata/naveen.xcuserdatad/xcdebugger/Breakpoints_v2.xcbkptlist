@@ -24,28 +24,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Matchismo/SetCardView.m"
-            timestampString = "421046374.482411"
+            timestampString = "421104904.292852"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "83"
-            endingLineNumber = "83"
-            landmarkName = "-drawRect:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Matchismo/SetCardView.m"
-            timestampString = "421046374.482411"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "188"
-            endingLineNumber = "188"
-            landmarkName = "-drawShapes"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
+            landmarkName = "-drawDiamond:width:height:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -56,12 +40,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Matchismo/CardGameViewController.m"
-            timestampString = "421055649.863992"
+            timestampString = "421062237.272927"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
-            landmarkName = "-reDealButton:"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
+            landmarkName = "-populateCards"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
