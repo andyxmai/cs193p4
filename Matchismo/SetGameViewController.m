@@ -43,6 +43,10 @@
             SetCardView *cardView = [[SetCardView alloc] initWithFrame:frame];
             cardView.center = center;
             Card *card = [self.game cardAtIndex:counter];
+            cardView.shape = ((SetCard *)card).shape;
+            cardView.count = ((SetCard *)card).count;
+            cardView.color = ((SetCard *)card).color;
+            cardView.shade = ((SetCard *)card).shade;
             cardView.faceUp = YES;
             [self.cardsBoundaryView addSubview:cardView];
             [self.cardViews addObject:cardView];
@@ -50,6 +54,8 @@
         }
     }
 }
+
+
 
 - (Grid *)cardGrid {
     if (!_cardGrid) {

@@ -19,6 +19,7 @@
 #define CORNER_FONT_STANDARD_HEIGHT 180.0
 #define CORNER_RADIUS 12.0
 #define CORNER_LINE_SPACING_REDUCTION 0.25
+#define STRIPE_INTERVAL 3.0
 
 - (CGFloat)cornerScaleFactor { return self.bounds.size.height / CORNER_FONT_STANDARD_HEIGHT; }
 - (CGFloat)cornerRadius { return CORNER_RADIUS * [self cornerScaleFactor]; }
@@ -47,22 +48,30 @@
     return self;
 }
 
+- (UIColor *) getColor{
+    if([self.color integerValue] == 0) return [UIColor greenColor];
+    else if ([self.color integerValue] == 1) return [UIColor redColor];
+    else{
+        return [UIColor purpleColor];
+    }
+}
+
+
 - (void)drawRect:(CGRect)rect
 {
     [super drawRect:rect];
     
     if (self.faceUp) {
-        NSString *imageName = [NSString stringWithFormat:@"%@%@", [self rankAsString], self.suit];
+        NSString *imageName = [NSString stringWithFormat:@""];
         UIImage *faceImage = [UIImage imageNamed:imageName];
         if (faceImage) {
             CGRect imageRect = CGRectInset(self.bounds,
                                            self.bounds.size.width * (1.0 - self.faceCardScaleFactor),
                                            self.bounds.size.height * (1.0 - self.faceCardScaleFactor));
             [faceImage drawInRect:imageRect];
-        }else {
-             [self drawPips];
         }
         [self drawCorners];
+        [self drawShapes];
     } else {
         UIImage *cardBackImage = [UIImage imageNamed:@"cardback"];
         CGRect imageRect = CGRectInset(self.bounds,
@@ -75,6 +84,7 @@
 
 - (void)drawCorners
 {
+//    [self drawSquiggle:CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2) width:self.bounds.size.width/3 height:self.bounds.size.height/8];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.alignment = NSTextAlignmentCenter;
     
@@ -83,10 +93,7 @@
     
     paragraphStyle.paragraphSpacingBefore = - cornerFont.pointSize * CORNER_LINE_SPACING_REDUCTION;
     
-    NSString *rank = [self rankAsString];
-    NSString *suit = self.suit;
-    
-    NSAttributedString *cornerText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", rank, suit] attributes:@{ NSParagraphStyleAttributeName : paragraphStyle, NSFontAttributeName : cornerFont }];
+    NSAttributedString *cornerText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@""] attributes:@{ NSParagraphStyleAttributeName : paragraphStyle, NSFontAttributeName : cornerFont }];
     
     CGRect textBounds;
     textBounds.origin = CGPointMake([self cornerOffset], [self cornerOffset]);
@@ -98,47 +105,103 @@
     [self popContext];
 }
 
--(void)drawSquiggle:(CGPoint)origin width:(int)width height:(int)height
+
+-(void)addStripes:(UIBezierPath*)currentPath{
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(currentContext);
+    CGContextSetLineWidth(currentContext, 0.5);
+    [currentPath addClip];
+    CGFloat minX = CGRectGetMinX(currentPath.bounds);
+    CGFloat maxX = CGRectGetMaxX(currentPath.bounds);
+    CGFloat maxY = CGRectGetMaxY(currentPath.bounds);
+    for(double x = minX; x < maxX; x+=STRIPE_INTERVAL){
+        CGContextMoveToPoint(currentContext, x, 0.0);
+        CGContextAddLineToPoint(currentContext, x, maxY);
+    }
+    CGContextStrokePath(currentContext);
+    CGContextRestoreGState(currentContext);
+}
+
+-(void) addShading:(UIBezierPath *)path{
+    if([self.shade integerValue] == 2){
+        [[self getColor] setFill];
+        [path fill];
+    }
+    else if([self.shade integerValue] == 1) [self addStripes:path];
+}
+
+-(void) drawShapeBorder:(UIBezierPath *)path{
+    path.lineWidth = 2;
+    [[self getColor] setStroke];
+    [path stroke];
+    [self addShading:path];
+}
+
+//0 is no fill, 1 is stripes, 2 is filled
+-(void)drawSquiggle:(CGPoint)origin width:(double)width height:(double)height
 {
-    UIBezierPath *squigglePath = [UIBezierPath bezierPath];
-    [squigglePath moveToPoint:origin];
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:origin];
     CGPoint topControlPoint1 = CGPointMake(origin.x + width/3.0, origin.y-height/2.0);
     CGPoint bottomControlPoint1 = CGPointMake(origin.x + 2*width/3.0, origin.y+height/2.0+height);
     CGPoint topControlPoint2 = CGPointMake(origin.x + 2*width/3.0, origin.y+height/2.0);
     CGPoint bottomControlPoint2 = CGPointMake(origin.x + width/3.0, origin.y-height/2.0+height);
-    [squigglePath addCurveToPoint:CGPointMake(origin.x+width, origin.y) controlPoint1: topControlPoint1 controlPoint2:topControlPoint2];
-    [squigglePath addLineToPoint:CGPointMake(origin.x+width, origin.y+height)];
-    [squigglePath addCurveToPoint:CGPointMake(origin.x, origin.y+height) controlPoint1:bottomControlPoint1 controlPoint2:bottomControlPoint2];
-    [squigglePath closePath];
-    squigglePath.lineWidth = 2;
-    [squigglePath stroke];
+    [path addCurveToPoint:CGPointMake(origin.x+width, origin.y) controlPoint1: topControlPoint1 controlPoint2:topControlPoint2];
+    [path addLineToPoint:CGPointMake(origin.x+width, origin.y+height)];
+    [path addCurveToPoint:CGPointMake(origin.x, origin.y+height) controlPoint1:bottomControlPoint1 controlPoint2:bottomControlPoint2];
+    [path closePath];
+    [self drawShapeBorder:path];
+    [self addShading:path];
 }
 
 
--(void)drawDiamond:(CGPoint)origin width:(int)width height:(int)height
+-(void)drawDiamond:(CGPoint)origin width:(double)width height:(double)height
 {
-    UIBezierPath *squigglePath = [UIBezierPath bezierPath];
-    [squigglePath moveToPoint:origin];
-    [squigglePath addLineToPoint:CGPointMake(origin.x+width/2.0, origin.y-height/2.0)];
-    [squigglePath addLineToPoint:CGPointMake(origin.x+width, origin.y)];
-    [squigglePath addLineToPoint:CGPointMake(origin.x+width/2.0, origin.y+height/2.0)];
-    [squigglePath closePath];
-    squigglePath.lineWidth = 2;
-    [squigglePath stroke];
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:origin];
+    [path addLineToPoint:CGPointMake(origin.x+width/2.0, origin.y-height/2.0)];
+    [path addLineToPoint:CGPointMake(origin.x+width, origin.y)];
+    [path addLineToPoint:CGPointMake(origin.x+width/2.0, origin.y+height/2.0)];
+    [path closePath];
+    [self drawShapeBorder:path];
+    [self addShading:path];
 }
 
--(void)drawOval:(CGPoint)origin width:(int)width height:(int)height
+-(void)drawOval:(CGPoint)origin width:(double)width height:(double)height
 {
-    UIBezierPath *squigglePath = [UIBezierPath bezierPath];
-    [squigglePath moveToPoint:origin];
-    [squigglePath addLineToPoint:CGPointMake(origin.x+width-height, origin.y)];
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:origin];
+    [path addLineToPoint:CGPointMake(origin.x+width-height, origin.y)];
     
-    [squigglePath addArcWithCenter:CGPointMake(origin.x+width-height, origin.y+height/2.0) radius:height/2.0 startAngle:3.0*M_PI/2.0 endAngle:M_PI/2.0 clockwise:true];
-    [squigglePath addLineToPoint:CGPointMake(origin.x, origin.y+height)];
-    [squigglePath addArcWithCenter:CGPointMake(origin.x, origin.y+height/2.0) radius:height/2.0 startAngle:M_PI/2.0 endAngle:3.0*M_PI/2.0 clockwise:true];
-    squigglePath.lineWidth = 2;
-    [squigglePath stroke];
+    [path addArcWithCenter:CGPointMake(origin.x+width-height, origin.y+height/2.0) radius:height/2.0 startAngle:3.0*M_PI/2.0 endAngle:M_PI/2.0 clockwise:true];
+    [path addLineToPoint:CGPointMake(origin.x, origin.y+height)];
+    [path addArcWithCenter:CGPointMake(origin.x, origin.y+height/2.0) radius:height/2.0 startAngle:M_PI/2.0 endAngle:3.0*M_PI/2.0 clockwise:true];
+    [self drawShapeBorder:path];
+    [self addShading:path];
 }
+
+//Squiggle = 0, oval = 1, diamond = 2,
+-(void)drawShapes
+{
+    double shapeHeight = self.bounds.size.height/6.0;
+    double shapeWidth = self.bounds.size.width/2.0;
+    double numShapes = [self.count integerValue]+1;
+    double spacingHeight = (self.bounds.size.height-shapeHeight*numShapes)/(numShapes+1);
+    int shapeNumber = [self.shape integerValue];
+    for(int i = 0; i < numShapes; i++){
+        CGPoint origin = CGPointMake((self.bounds.size.width-shapeWidth)/2, (i+1)*spacingHeight+i*shapeHeight);
+        if(shapeNumber == 0) [self drawSquiggle: origin width:shapeWidth height:shapeHeight];
+        else if(shapeNumber == 1){
+            origin.x += shapeHeight/2.0;
+            [self drawOval: origin width:shapeWidth height:shapeHeight];
+        }
+        else{
+            origin.y += shapeHeight/2.0;
+            [self drawDiamond: origin width:shapeWidth height:shapeHeight];
+        }
+    }
+}
+
 
 
 - (void)pushContextAndRotateUpsideDown
@@ -154,23 +217,6 @@
     CGContextRestoreGState(UIGraphicsGetCurrentContext());
 }
 
-- (NSString *)rankAsString
-{
-    return @[@"?",@"A",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"J",@"Q",@"K"][self.rank];
-}
-
-#pragma mark - Pips
-
-#define PIP_HOFFSET_PERCENTAGE 0.165
-#define PIP_VOFFSET1_PERCENTAGE 0.090
-#define PIP_VOFFSET2_PERCENTAGE 0.175
-#define PIP_VOFFSET3_PERCENTAGE 0.270
-#define PIP_FONT_SCALE_FACTOR 0.015
-
-- (void)drawPips
-{
-    
-}
 
 #pragma mark Gestures
 
@@ -201,21 +247,15 @@
     [self setNeedsDisplay];
 }
 
-- (void)setSuit:(NSString *)suit
-{
-    _suit = suit;
-    [self setNeedsDisplay];
-}
-
-- (void)setRank:(NSUInteger)rank
-{
-    _rank = rank;
-    [self setNeedsDisplay];
-}
-
 - (void)setFaceUp:(BOOL)faceUp
 {
     _faceUp = faceUp;
+    [self setNeedsDisplay];
+}
+
+- (void)setShape:(NSNumber *)shape
+{
+    _shape = shape;
     [self setNeedsDisplay];
 }
 
