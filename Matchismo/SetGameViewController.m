@@ -35,13 +35,6 @@
     [self populateCards];
 }
 
-- (void)removeAllCardViews
-{
-    for (UIView *v in self.cardViews) {
-        [v removeFromSuperview];
-    }
-}
-
 - (void)populateCards
 {
     //NSLog(@"populate cards");
@@ -120,7 +113,7 @@
             [cardView addGestureRecognizer:singleTapCardGestureRecognizer];
             
             [_cardViews addObject:cardView];
-            //[self.cardsBoundaryView addSubview:cardView];
+            [self.cardsBoundaryView addSubview:cardView];
         }
     }
     
@@ -132,7 +125,7 @@
     CardView *cardView = (CardView *)(recognizer.view);
     cardView.faceUp = !cardView.faceUp;
     int chosenCardViewIndex = [self.cardViews indexOfObject:cardView];
-    //NSLog(@"%@",[NSString stringWithFormat:@"%d", chosenCardViewIndex]);
+    NSLog(@"%@",[NSString stringWithFormat:@"%d", chosenCardViewIndex]);
     [self.game chooseCardAtIndex:chosenCardViewIndex];
     
 //    if (self.game.scoreDiff != 0) {
