@@ -64,12 +64,7 @@
 {
     if (self.faceUp) [super drawRect:rect];
     else{
-        UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:[self  cornerRadius]];
-        [roundedRect addClip];
-        [[UIColor grayColor] setFill];
-        UIRectFill(self.bounds);
-        [[UIColor blackColor] setStroke];
-        [roundedRect stroke];
+        [super drawRoundedRect:rect fillColor:[UIColor grayColor]];
     }
     [self drawCorners];
     [self drawShapes];

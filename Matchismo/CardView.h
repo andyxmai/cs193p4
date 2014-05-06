@@ -10,5 +10,8 @@
 
 @interface CardView : UIView
 @property (nonatomic) BOOL faceUp;
+@property (nonatomic) BOOL matched;
+
+-(void) drawRoundedRect:(CGRect)rect fillColor:(UIColor *)color;
 
 @end

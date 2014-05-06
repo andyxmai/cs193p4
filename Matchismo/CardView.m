@@ -24,17 +24,19 @@
 - (CGFloat)cornerRadius { return CORNER_RADIUS * [self cornerScaleFactor]; }
 - (CGFloat)cornerOffset { return [self cornerRadius] / 3.0; }
 
-- (void)drawRect:(CGRect)rect
-{
+-(void) drawRoundedRect:(CGRect)rect fillColor:(UIColor *)color{
     UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:[self cornerRadius]];
-    
     [roundedRect addClip];
-    
-    [[UIColor whiteColor] setFill];
+    [color setFill];
     UIRectFill(self.bounds);
-    
     [[UIColor blackColor] setStroke];
     [roundedRect stroke];
+}
+
+
+- (void)drawRect:(CGRect)rect
+{
+    [self drawRoundedRect:rect fillColor:[UIColor whiteColor]];
 }
 
 - (void)setFaceUp:(BOOL)faceUp
@@ -43,6 +45,11 @@
     [self setNeedsDisplay];
 }
 
+- (void)setMatched:(BOOL)matched
+{
+    _matched = matched;
+    [self setNeedsDisplay];
+}
 
 #pragma mark Initialization
 

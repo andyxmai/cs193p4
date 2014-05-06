@@ -76,13 +76,14 @@
         PlayingCardView *cardView = [self.cardViews objectAtIndex:counter];
         cardView.center = center;
         cardView.frame = frame;
+        cardView.matched = [self.game cardAtIndex:counter].isMatched;
         //cardView.faceUp = !card.isChosen;
         //cardView.faceUp = card.isMatched;
         
         if (animate) {
             [UIView transitionWithView:self.cardsBoundaryView
                               duration:0.5
-                               options:UIViewAnimationOptionTransitionCurlDown
+                            options:UIViewAnimationOptionTransitionCurlDown
                             animations:^ { [self.cardsBoundaryView addSubview:cardView]; }
                             completion:nil];
         } else {
