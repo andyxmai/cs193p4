@@ -62,14 +62,14 @@
     [super drawRect:rect];
     
     if (self.faceUp) {
-        NSString *imageName = [NSString stringWithFormat:@""];
-        UIImage *faceImage = [UIImage imageNamed:imageName];
-        if (faceImage) {
-            CGRect imageRect = CGRectInset(self.bounds,
-                                           self.bounds.size.width * (1.0 - self.faceCardScaleFactor),
-                                           self.bounds.size.height * (1.0 - self.faceCardScaleFactor));
-            [faceImage drawInRect:imageRect];
-        }
+//        NSString *imageName = [NSString stringWithFormat:@""];
+//        UIImage *faceImage = [UIImage imageNamed:imageName];
+//        if (faceImage) {
+//            CGRect imageRect = CGRectInset(self.bounds,
+//                                           self.bounds.size.width * (1.0 - self.faceCardScaleFactor),
+//                                           self.bounds.size.height * (1.0 - self.faceCardScaleFactor));
+//            [faceImage drawInRect:imageRect];
+//        }
         [self drawCorners];
         [self drawShapes];
     } else {

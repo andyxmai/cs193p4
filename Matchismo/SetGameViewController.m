@@ -16,7 +16,6 @@
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (strong, nonatomic) NSMutableArray *cardViews;
-@property (nonatomic) int fakeCounter;
 
 @property (weak, nonatomic) IBOutlet UIView *cardsBoundaryView;
 //@property (strong, nonatomic) Grid *cardGrid;
@@ -27,15 +26,12 @@
 
 @implementation SetGameViewController
 
-#define NUM_START_CARDS 24
+#define NUM_START_CARDS 12
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.cardViews = nil;
-    self.cardGrid = nil;
-    self.fakeCounter = 0;
     [self populateCards];
 }
 
@@ -85,7 +81,7 @@
 {
     if (!_cardViews) {
         _cardViews = [[NSMutableArray alloc] init];
-        for (NSUInteger i = 0; i < 24; i++) {
+        for (NSUInteger i = 0; i < NUM_START_CARDS; i++) {
             SetCardView *cardView = [[SetCardView alloc] init];
             Card *card = [self.game cardAtIndex:i];
             SetCard *setCard = (SetCard *)card;
@@ -127,8 +123,6 @@
     }
     
     [self populateCards];
-    
-    self.fakeCounter++;
      
     //self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
@@ -230,7 +224,7 @@
 {
     if (!_game) {
         
-        _game = [[CardMatchingGame alloc] initWithCardCount:24
+        _game = [[CardMatchingGame alloc] initWithCardCount:NUM_START_CARDS
                                                   usingDeck:[self createDeck]];
     }
     
