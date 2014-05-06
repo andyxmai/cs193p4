@@ -92,7 +92,10 @@
     NSString *rank = [self rankAsString];
     NSString *suit = self.suit;
     
-    NSAttributedString *cornerText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", rank, suit] attributes:@{ NSParagraphStyleAttributeName : paragraphStyle, NSFontAttributeName : cornerFont }];
+    NSMutableAttributedString *cornerText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", rank, suit] attributes:@{ NSParagraphStyleAttributeName : paragraphStyle, NSFontAttributeName : cornerFont }];
+    if([suit isEqual:@"♥︎"] || [suit isEqual:@"♦︎"]){
+        [cornerText addAttribute:NSForegroundColorAttributeName value: [UIColor redColor] range:NSMakeRange(0, [cornerText length])];
+    }
     
     CGRect textBounds;
     textBounds.origin = CGPointMake([self cornerOffset], [self cornerOffset]);
@@ -168,7 +171,10 @@
     CGPoint middle = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
     UIFont *pipFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     pipFont = [pipFont fontWithSize:[pipFont pointSize] * self.bounds.size.width * PIP_FONT_SCALE_FACTOR];
-    NSAttributedString *attributedSuit = [[NSAttributedString alloc] initWithString:self.suit attributes:@{ NSFontAttributeName : pipFont }];
+    NSMutableAttributedString *attributedSuit = [[NSMutableAttributedString alloc] initWithString:self.suit attributes:@{ NSFontAttributeName : pipFont }];
+    if([self.suit isEqual:@"♥︎"] || [self.suit isEqual:@"♦︎"]){
+        [attributedSuit addAttribute:NSForegroundColorAttributeName value: [UIColor redColor] range:NSMakeRange(0, [attributedSuit length])];
+    }
     CGSize pipSize = [attributedSuit size];
     CGPoint pipOrigin = CGPointMake(
                                     middle.x-pipSize.width/2.0-hoffset*self.bounds.size.width,
