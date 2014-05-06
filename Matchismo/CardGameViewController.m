@@ -69,6 +69,7 @@
             PlayingCardView *cardView = [self.cardViews objectAtIndex:counter];
             cardView.center = center;
             cardView.frame = frame;
+            cardView.matched = [self.game cardAtIndex:counter].isMatched;
             //cardView.faceUp = !([self.game cardAtIndex:counter].isChosen);
             
             if (animate) {

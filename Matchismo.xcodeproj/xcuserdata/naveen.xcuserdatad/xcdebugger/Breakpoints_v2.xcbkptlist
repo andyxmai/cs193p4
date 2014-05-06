@@ -24,11 +24,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Matchismo/SetCardView.m"
-            timestampString = "421104904.292852"
+            timestampString = "421105833.641338"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "163"
-            endingLineNumber = "163"
+            startingLineNumber = "158"
+            endingLineNumber = "158"
             landmarkName = "-drawDiamond:width:height:"
             landmarkType = "5">
          </BreakpointContent>
@@ -45,7 +45,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "53"
             endingLineNumber = "53"
-            landmarkName = "-populateCards"
+            landmarkName = "-populateCards:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

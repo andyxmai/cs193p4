@@ -49,15 +49,21 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    [super drawRect:rect];
-    
+    if(!self.matched)[super drawRect:rect];
+    else{
+        [super drawRoundedRect:rect fillColor:[UIColor grayColor]];
+    }
     if (self.faceUp) {
         NSString *imageName = [NSString stringWithFormat:@"%@%@", [self rankAsString], self.suit];
         UIImage *faceImage = [UIImage imageNamed:imageName];
         if (faceImage) {
+            UIColor * imageRectColor = (self.matched) ? [UIColor grayColor] : [UIColor whiteColor];
+            [imageRectColor setFill];
             CGRect imageRect = CGRectInset(self.bounds,
                                            self.bounds.size.width * (1.0 - self.faceCardScaleFactor),
                                            self.bounds.size.height * (1.0 - self.faceCardScaleFactor));
+            
+            UIRectFill(rect);
             [faceImage drawInRect:imageRect];
         }else {
              [self drawPips];
@@ -70,9 +76,7 @@
                                        self.bounds.size.height * (1.0 - self.faceCardScaleFactor));
         [cardBackImage drawInRect:imageRect];
     }
-    
     self.cellAspectRatio = self.bounds.size.width/self.bounds.size.height;
-
 }
 
 - (void)drawCorners
