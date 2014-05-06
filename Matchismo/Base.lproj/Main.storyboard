@@ -31,7 +31,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="redealButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="1Az-za-Eoa"/>
+                                    <action selector="reDealButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="h5C-OK-Vxc"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uEz-1U-EQe">
@@ -117,6 +117,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
+                                    <action selector="reDealButton:" destination="2XT-OG-GQ8" eventType="touchUpInside" id="ER2-DB-b8r"/>
                                     <action selector="redealButton:" destination="2XT-OG-GQ8" eventType="touchUpInside" id="vTn-hu-y6V"/>
                                 </connections>
                             </button>

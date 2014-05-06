@@ -26,7 +26,18 @@
 {
     [super viewDidLoad];
     self.cardViews = nil;
-    
+    [self populateCards];
+}
+
+//reDeals the cards and restarts the game.
+- (IBAction)reDealButton:(UIButton *)sender {
+    self.cardViews =[[NSMutableArray alloc] init];
+    self.game = [[CardMatchingGame alloc] initWithCardCount:NUM_START_CARDS usingDeck:[self createDeck]];
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+    self.cardGrid = [[Grid alloc] init];
+    self.cardGrid.cellAspectRatio = 0.75;
+    self.cardGrid.minimumNumberOfCells = NUM_START_CARDS;
+    self.cardGrid.size = self.cardsBoundaryView.bounds.size;
     [self populateCards];
 }
 
