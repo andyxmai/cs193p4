@@ -91,6 +91,7 @@
         [self.cardViews addObject:cardView];
     }
     
+    self.cardGrid.minimumNumberOfCells += 3;
     [self populateCards];
 }
 
@@ -136,6 +137,7 @@
 //    }
     
     if (self.game.scoreDiff > 0) {
+        self.cardGrid.minimumNumberOfCells -= 3;
         NSLog(@"matched");
     }
     

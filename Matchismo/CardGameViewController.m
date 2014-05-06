@@ -30,9 +30,9 @@
     [self populateCards];
 }
 
--(void)removeAllViews{
-    for (UIView *view in [self.cardsBoundaryView subviews])
-    {
+-(void)removeAllCardViews
+{
+    for (UIView *view in [self.cardsBoundaryView subviews]) {
         [view removeFromSuperview];
     }
 }
@@ -47,13 +47,6 @@
     self.cardGrid = nil;
     
     [self populateCards];
-}
-
-- (void)removeAllCardViews
-{
-    for (UIView *v in self.cardViews) {
-        [v removeFromSuperview];
-    }
 }
 
 - (void)populateCards
