@@ -18,9 +18,6 @@
 @property (strong, nonatomic) NSMutableArray *cardViews;
 
 @property (weak, nonatomic) IBOutlet UIView *cardsBoundaryView;
-//@property (strong, nonatomic) Grid *cardGrid;
-//@property (strong, nonatomic) NSMutableArray *cardViews;
-
 
 @end
 
@@ -69,22 +66,17 @@
             }
             
             col++;
-        } else {
-            //NSLog(@"%@",[NSString stringWithFormat:@"%d",counter]);
         }
-    
         counter++;
     }
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
 
 - (IBAction)dealCards:(UIButton *)sender {
-    NSLog(@"deal");
     [self.game addThreeCards];
     
     for (NSUInteger i = 3; i > 0; i--) {
         Card *card = [self.game cardAtIndex:(self.game.numCardsDrawn-i)];
-        NSLog(@"%d", self.game.numCardsDrawn);
         SetCardView *cardView = [[SetCardView alloc] init];
         SetCard *setCard = (SetCard *)card;
         cardView.shade = setCard.shade;
@@ -152,12 +144,10 @@
         CardView *cardView = (CardView *)(recognizer.view);
         cardView.faceUp = !cardView.faceUp;
         int chosenCardViewIndex = [self.cardViews indexOfObject:cardView];
-        NSLog(@"%@",[NSString stringWithFormat:@"%d", chosenCardViewIndex]);
         [self.game chooseCardAtIndex:chosenCardViewIndex];
         
         if (self.game.scoreDiff > 0) {
             self.cardGrid.minimumNumberOfCells -= 3;
-            NSLog(@"matched");
            
             NSMutableArray *cardViews = [self getCardViewsFromCards:self.game.currentCards];
             

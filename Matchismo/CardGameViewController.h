@@ -18,7 +18,6 @@
 @property (strong, nonatomic) UIDynamicAnimator *animator;
 
 
-- (void)updateUI;
 - (void)flipCardWithTouch:(UITapGestureRecognizer *)recognizer;
 - (void)removeAllCardViews;
 

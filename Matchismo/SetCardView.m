@@ -70,12 +70,6 @@
     [self drawShapes];
 }
 
-
-
-
-
-
-
 - (void)drawCorners
 {
 //    [self drawSquiggle:CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2) width:self.bounds.size.width/3 height:self.bounds.size.height/8];

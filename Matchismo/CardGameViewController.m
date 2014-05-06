@@ -14,7 +14,6 @@
 
 @interface CardGameViewController ()
 @property (strong, nonatomic) CardMatchingGame *game;
-@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (strong, nonatomic) NSMutableArray *cardViews;
 @end
 
@@ -25,15 +24,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //[self.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
-    //self.cardViews = nil;
-    [self populateCards:NO];
+    [self populateCardsWithAnimation:NO];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     self.cardGrid.size = self.cardsBoundaryView.bounds.size;
-    [self populateCards:NO];
+    [self populateCardsWithAnimation:NO];
 }
 
 -(void)removeAllCardViews
@@ -53,10 +50,10 @@
     self.cardGrid = nil;
     
     self.animator = nil;
-    [self populateCards:YES];
+    [self populateCardsWithAnimation:YES];
 }
 
-- (void)populateCards:(BOOL)animate
+- (void)populateCardsWithAnimation:(BOOL)animate
 {
     [self removeAllCardViews];
     NSUInteger counter = 0;
@@ -64,7 +61,7 @@
     NSUInteger col = 0;
     
     while (counter < [self.cardViews count]) {
-        //Card *card = [self.game cardAtIndex:counter];
+        Card *card = [self.game cardAtIndex:counter];
         if (col == self.cardGrid.columnCount) {
             row++;
             col = 0;
@@ -76,9 +73,8 @@
         PlayingCardView *cardView = [self.cardViews objectAtIndex:counter];
         cardView.center = center;
         cardView.frame = frame;
+        cardView.faceUp = card.isChosen;
         cardView.matched = [self.game cardAtIndex:counter].isMatched;
-        //cardView.faceUp = !card.isChosen;
-        //cardView.faceUp = card.isMatched;
         
         if (animate) {
             [UIView transitionWithView:self.cardsBoundaryView
@@ -95,33 +91,6 @@
         counter++;
     }
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
-    
-//    NSUInteger counter = 0;
-//    for (NSUInteger i = 0; i < self.cardGrid.rowCount; i++) {
-//        for (NSUInteger j = 0; j < self.cardGrid.columnCount; j++) {
-//            CGPoint center = [self.cardGrid centerOfCellAtRow:i inColumn:j];
-//            CGRect frame = [self.cardGrid frameOfCellAtRow:i inColumn:j];
-//            
-//            PlayingCardView *cardView = [self.cardViews objectAtIndex:counter];
-//            cardView.center = center;
-//            cardView.frame = frame;
-//            //cardView.faceUp = !([self.game cardAtIndex:counter].isChosen);
-//            
-//            if (animate) {
-//                [UIView transitionWithView:self.cardsBoundaryView
-//                              duration:0.5
-//                               options:UIViewAnimationOptionTransitionCurlUp
-//                            animations:^ { [self.cardsBoundaryView addSubview:cardView]; }
-//                            completion:nil];
-//            } else {
-//                [self.cardsBoundaryView addSubview:cardView];
-//            }
-//            //ADD THIS ^!!!!!!!
-//            counter++;
-//        }
-//    }
-//    
-//    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
 
 - (void)flipCardWithTouch:(UITapGestureRecognizer *)recognizer
@@ -138,10 +107,10 @@
                             animations:nil
                             completion:nil];
             [self.game chooseCardAtIndex:chosenCardViewIndex];
-            [self populateCards:NO];
+            [self populateCardsWithAnimation:NO];
         }
     } else {
-        [self populateCards:YES];
+        [self populateCardsWithAnimation:YES];
         self.animator = nil;
     }
 }
@@ -178,7 +147,6 @@
     return _cardGrid;
 }
 - (IBAction)gatherCardsWithPinch:(UIPinchGestureRecognizer *)gesture {
-    NSLog(@"HERE");
     if ((gesture.state == UIGestureRecognizerStateChanged) ||
         (gesture.state == UIGestureRecognizerStateEnded)) {
         if (!self.animator) {
@@ -196,7 +164,6 @@
     if (self.animator) {
         CGPoint point = [gesture locationInView:self.cardsBoundaryView];
         if (gesture.state == UIGestureRecognizerStateBegan) {
-            NSLog(@"Pan Began");
             for (UIDynamicBehavior *behavior in self.animator.behaviors) {
                 [self.animator removeBehavior:behavior];
             }
@@ -206,12 +173,10 @@
                 [self.animator addBehavior:attachBehavior];
             }
         } else if (gesture.state == UIGestureRecognizerStateChanged) {
-            NSLog(@"Panning");
             for (UIDynamicBehavior *behavior in self.animator.behaviors) {
                 ((UIAttachmentBehavior *)behavior).anchorPoint = point;
             }
         } else if (gesture.state == UIGestureRecognizerStateEnded) {
-            NSLog(@"Pan Ended");
             for (UIDynamicBehavior *behavior in self.animator.behaviors) {
                 [self.animator removeBehavior:behavior];
             }
@@ -220,8 +185,6 @@
                 UISnapBehavior *snapBehavior = [[UISnapBehavior alloc] initWithItem:cardView snapToPoint:point];
                 [self.animator addBehavior:snapBehavior];
             }
-            
-            //self.animator = nil;
         }
     }
 }
@@ -246,95 +209,6 @@
 - (Deck *)createDeck
 {
     return [[PlayingCardDeck alloc] init];
-}
-
-/*
- Button event for the left Card
- */
-- (IBAction)touchCardButton:(UIButton *)sender
-{
-    int chosenButtonIndex = [self.cardButtons indexOfObject:sender];
-    [self.game chooseCardAtIndex:chosenButtonIndex];
-    [self updateUI];
-}
-
-/*
- Updates the UI to reflect which cards have been flipped and matched.
- It also sets the texts of the labels.
- */
-- (void)updateUI
-{
-    for (UIButton *cardButton in self.cardButtons) {
-        int cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
-        Card *card = [self.game cardAtIndex:cardButtonIndex];
-        [cardButton setAttributedTitle:[self titleForCard:card] forState:UIControlStateNormal];
-        [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
-        cardButton.enabled = !card.isMatched;
-    }
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
-}
-
-/*
- Returns the attributed string used to display as the result of the last (mis)match
- */
-- (NSMutableAttributedString *)getLastResultString
-{
-    NSMutableAttributedString *result = [[NSMutableAttributedString alloc] init];
-    
-    NSMutableAttributedString *currentCards = [self combineCardContents:self.game.currentCards];
-    
-    if (self.game.scoreDiff == 0) {
-        result = currentCards;
-    } else if (self.game.scoreDiff < 0) {
-        [result appendAttributedString:currentCards];
-        [result appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"don't match! %d points penalty!",-1*self.game.scoreDiff]]];
-        
-        self.game.scoreDiff = 0;
-    } else {
-        [result appendAttributedString:[[NSAttributedString alloc] initWithString:@"Matched "]];
-        [result appendAttributedString:currentCards];
-        [result appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat: @"for %d points",self.game.scoreDiff]]];
-    }
-    
-    return result;
-}
-
-/*
- Helper method to concatent the contents of an array of cards
- */
-- (NSMutableAttributedString *)combineCardContents:(NSArray *)otherCards
-{
-    NSMutableAttributedString *cardContents = [[NSMutableAttributedString alloc] init];
-    
-    for (Card *card in otherCards) {
-        [cardContents appendAttributedString:[[NSAttributedString alloc] initWithString:card.contents]];
-        [cardContents appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
-    }
-    
-    return cardContents;
-}
-
-
-/*
- Helper method to set the title for each card for UI
- */
-- (NSAttributedString *)titleForCard:(Card *)card
-{
-    NSMutableAttributedString * title = [[NSMutableAttributedString alloc] initWithString:@""];
-    
-    if (card.isChosen) {
-        [title appendAttributedString:[[NSAttributedString alloc] initWithString:card.contents]];
-    }
-    
-    return title;
-}
-
-/*
- Helper method to set the background image for each card
- */
-- (UIImage *)backgroundImageForCard:(Card *)card
-{
-    return [UIImage imageNamed:card.isChosen ? @"cardfront" : @"cardback"];
 }
 
 @end
