@@ -59,7 +59,7 @@
     }
 }
 
-
+/* Draws rect for set cards. It modifies the super method */
 - (void)drawRect:(CGRect)rect
 {
     if (self.faceUp) [super drawRect:rect];
@@ -70,9 +70,9 @@
     [self drawShapes];
 }
 
+/* Draws corners for set cards */
 - (void)drawCorners
 {
-//    [self drawSquiggle:CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2) width:self.bounds.size.width/3 height:self.bounds.size.height/8];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.alignment = NSTextAlignmentCenter;
     
@@ -93,7 +93,7 @@
     [self popContext];
 }
 
-
+/* Adds strips for the shading of the card */
 -(void)addStripes:(UIBezierPath*)currentPath{
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGContextSaveGState(currentContext);
@@ -110,6 +110,7 @@
     CGContextRestoreGState(currentContext);
 }
 
+/* Fills the set card for shading */
 -(void) addShading:(UIBezierPath *)path{
     if([self.shade integerValue] == 2){
         [[self getColor] setFill];
@@ -118,6 +119,7 @@
     else if([self.shade integerValue] == 1) [self addStripes:path];
 }
 
+/* Draws the shape */
 -(void) drawShapeBorder:(UIBezierPath *)path{
     path.lineWidth = 2;
     [[self getColor] setStroke];
@@ -142,7 +144,7 @@
     [self addShading:path];
 }
 
-
+/* Draws the diamond */
 -(void)drawDiamond:(CGPoint)origin width:(double)width height:(double)height
 {
     UIBezierPath *path = [UIBezierPath bezierPath];
@@ -155,6 +157,7 @@
     [self addShading:path];
 }
 
+/* Draws the oval */
 -(void)drawOval:(CGPoint)origin width:(double)width height:(double)height
 {
     UIBezierPath *path = [UIBezierPath bezierPath];

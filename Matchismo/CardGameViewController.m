@@ -53,6 +53,7 @@
     [self populateCardsWithAnimation:YES];
 }
 
+/* Draws and allocates the card views to the superview using the grid. It can animate */
 - (void)populateCardsWithAnimation:(BOOL)animate
 {
     [self removeAllCardViews];
@@ -93,6 +94,7 @@
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
 
+/* Handler for the tapping the card */
 - (void)flipCardWithTouch:(UITapGestureRecognizer *)recognizer
 {
     if (!self.animator) {
@@ -115,6 +117,7 @@
     }
 }
 
+/* Setter for cardViews. It lazily allocates the playing card views */
 - (NSMutableArray *)cardViews
 {
     if (!_cardViews) {

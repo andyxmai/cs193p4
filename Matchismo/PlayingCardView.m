@@ -47,6 +47,9 @@
     return self;
 }
 
+/*
+ Draws the rectangle for PlayingCardView. It draws the corner text and the pips of the card
+ */
 - (void)drawRect:(CGRect)rect
 {
     if(!self.matched)[super drawRect:rect];
@@ -79,6 +82,9 @@
     self.cellAspectRatio = self.bounds.size.width/self.bounds.size.height;
 }
 
+/*
+ Draws the coner text of playing cards with the appropriate spacing
+ */
 - (void)drawCorners
 {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
@@ -104,6 +110,9 @@
     [self popContext];
 }
 
+/*
+ 
+ */
 - (void)pushContextAndRotateUpsideDown
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -112,11 +121,17 @@
     CGContextRotateCTM(context, M_PI);
 }
 
+/*
+ Restores context
+ */
 - (void)popContext
 {
     CGContextRestoreGState(UIGraphicsGetCurrentContext());
 }
 
+/*
+ Returns the string as rank
+ */
 - (NSString *)rankAsString
 {
     return @[@"?",@"A",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"J",@"Q",@"K"][self.rank];
@@ -129,6 +144,9 @@
 #define PIP_VOFFSET2_PERCENTAGE 0.175
 #define PIP_VOFFSET3_PERCENTAGE 0.270
 
+/*
+ Draws the pips for the playing card
+ */
 - (void)drawPips
 {
     if ((self.rank == 1) || (self.rank == 5) || (self.rank == 9) || (self.rank == 3)) {
@@ -160,6 +178,9 @@
 
 #define PIP_FONT_SCALE_FACTOR 0.015
 
+/*
+ Helper method to draw the pips with the correct offsets
+ */
 - (void)drawPipsWithHorizontalOffset:(CGFloat)hoffset
                       verticalOffset:(CGFloat)voffset
                           upsideDown:(BOOL)upsideDown
@@ -182,6 +203,9 @@
     if (upsideDown) [self popContext];
 }
 
+/*
+ Helper method to draw the pips with the correct offsets
+ */
 - (void)drawPipsWithHorizontalOffset:(CGFloat)hoffset
                       verticalOffset:(CGFloat)voffset
                   mirroredVertically:(BOOL)mirroredVertically
@@ -198,6 +222,9 @@
 
 #pragma mark Gestures
 
+/*
+ Resizes with the card with pinch
+ */
 - (void)resizeFaceWithPinch:(UIPinchGestureRecognizer *)gesture
 {
     if ((gesture.state == UIGestureRecognizerStateChanged) ||
@@ -207,10 +234,12 @@
     }
 }
 
+/*
+ Handler method for touching the card
+ */
 - (void)flipCardWithTouch:(UITapGestureRecognizer *)recognizer
 {
     self.faceUp = !self.faceUp;
-    //NSLog(@"Tapped");
 }
 
 #pragma mark Properties
@@ -225,31 +254,25 @@
     return _faceCardScaleFactor;
 }
 
+/* Setter for face card scale */
 - (void)setFaceCardScaleFactor:(CGFloat)faceCardScaleFactor
 {
     _faceCardScaleFactor = faceCardScaleFactor;
     [self setNeedsDisplay];
 }
 
+/* Setter for suit */
 - (void)setSuit:(NSString *)suit
 {
     _suit = suit;
     [self setNeedsDisplay];
 }
 
+/* Setter for rank */
 - (void)setRank:(NSUInteger)rank
 {
     _rank = rank;
     [self setNeedsDisplay];
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
 
 @end
