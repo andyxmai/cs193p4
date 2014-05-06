@@ -48,6 +48,9 @@
     return self;
 }
 
+/*
+ Getting colors: 0 - Green, 1 - Red, 2 - Purple
+ */
 - (UIColor *) getColor{
     if([self.color integerValue] == 0) return [UIColor greenColor];
     else if ([self.color integerValue] == 1) return [UIColor redColor];

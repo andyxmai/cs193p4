@@ -13,17 +13,17 @@
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="431"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Score: 0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rPl-B4-4jh">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rPl-B4-4jh">
                                 <rect key="frame" x="20" y="406" width="280" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H1a-Lg-6TB">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H1a-Lg-6TB">
                                 <rect key="frame" x="257" y="402" width="43" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="redeal">
@@ -34,14 +34,31 @@
                                     <action selector="reDealButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="h5C-OK-Vxc"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uEz-1U-EQe">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uEz-1U-EQe">
                                 <rect key="frame" x="7" y="76" width="306" height="322"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="f3G-Yx-Vka" appends="YES" id="gfw-kR-pcR"/>
+                                    <outletCollection property="gestureRecognizers" destination="bNJ-Pl-yOi" appends="YES" id="svY-YK-8Lh"/>
+                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.50196081399917603" blue="0.25098040699958801" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="rPl-B4-4jh" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="0I6-iP-xFU"/>
+                            <constraint firstItem="uEz-1U-EQe" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="7" id="7FN-nA-Ziy"/>
+                            <constraint firstItem="uEz-1U-EQe" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="12" id="OWe-u9-mAO"/>
+                            <constraint firstItem="rPl-B4-4jh" firstAttribute="baseline" secondItem="H1a-Lg-6TB" secondAttribute="baseline" id="SEA-PP-pa0"/>
+                            <constraint firstItem="H1a-Lg-6TB" firstAttribute="trailing" secondItem="rPl-B4-4jh" secondAttribute="trailing" id="Smr-yy-8cE"/>
+                            <constraint firstItem="rPl-B4-4jh" firstAttribute="top" secondItem="uEz-1U-EQe" secondAttribute="bottom" constant="8" symbolic="YES" id="TpH-ug-GhV"/>
+                            <constraint firstAttribute="trailing" secondItem="rPl-B4-4jh" secondAttribute="trailing" constant="20" symbolic="YES" id="UJU-iS-KvY"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="rPl-B4-4jh" secondAttribute="bottom" constant="4" id="kQV-qa-6jB"/>
+                            <constraint firstItem="uEz-1U-EQe" firstAttribute="centerX" secondItem="rPl-B4-4jh" secondAttribute="centerX" id="xbu-OX-Rxj"/>
+                        </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" id="NiM-zR-RnK"/>
                     <connections>
                         <outlet property="cardsBoundaryView" destination="uEz-1U-EQe" id="nnx-Db-yN6"/>
@@ -49,6 +66,16 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <pinchGestureRecognizer id="f3G-Yx-Vka">
+                    <connections>
+                        <action selector="gatherCardsWithPinch:" destination="vXZ-lx-hvc" id="i9z-GC-vBQ"/>
+                    </connections>
+                </pinchGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="bNJ-Pl-yOi">
+                    <connections>
+                        <action selector="moveCardsWithPan:" destination="vXZ-lx-hvc" id="Y30-oT-NXc"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1177" y="135"/>
         </scene>
@@ -99,17 +126,17 @@
                         <viewControllerLayoutGuide type="bottom" id="TiQ-76-DVl"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="9Gt-Mu-mLx">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="431"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Score: 0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3B7-rB-d1I">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3B7-rB-d1I">
                                 <rect key="frame" x="20" y="406" width="280" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GhG-Fy-tIF">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GhG-Fy-tIF">
                                 <rect key="frame" x="257" y="402" width="43" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="redeal">
@@ -120,12 +147,17 @@
                                     <action selector="reDealButton:" destination="2XT-OG-GQ8" eventType="touchUpInside" id="rza-9X-t7Z"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eHZ-Ae-87J">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eHZ-Ae-87J">
                                 <rect key="frame" x="7" y="72" width="306" height="322"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="mnv-tu-F54" appends="YES" id="AOS-OZ-oa5"/>
+                                    <outletCollection property="gestureRecognizers" destination="NfW-4e-Vd9" appends="YES" id="Z9w-PG-D3O"/>
+                                </connections>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3g1-LD-Dy0">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3g1-LD-Dy0">
                                 <rect key="frame" x="145" y="402" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="deal">
@@ -138,7 +170,21 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="3B7-rB-d1I" firstAttribute="leading" secondItem="9Gt-Mu-mLx" secondAttribute="leading" constant="20" symbolic="YES" id="6We-En-BCu"/>
+                            <constraint firstItem="3g1-LD-Dy0" firstAttribute="baseline" secondItem="GhG-Fy-tIF" secondAttribute="baseline" id="Flw-ql-3sJ"/>
+                            <constraint firstItem="3B7-rB-d1I" firstAttribute="trailing" secondItem="GhG-Fy-tIF" secondAttribute="trailing" id="Jy6-g4-uh1"/>
+                            <constraint firstAttribute="trailing" secondItem="3B7-rB-d1I" secondAttribute="trailing" constant="20" symbolic="YES" id="LnK-Ui-Nvx"/>
+                            <constraint firstItem="3B7-rB-d1I" firstAttribute="centerX" secondItem="3g1-LD-Dy0" secondAttribute="centerX" id="fbX-Dm-69L"/>
+                            <constraint firstItem="TiQ-76-DVl" firstAttribute="top" secondItem="3B7-rB-d1I" secondAttribute="bottom" constant="4" id="gbC-H0-7G0"/>
+                            <constraint firstItem="3g1-LD-Dy0" firstAttribute="top" secondItem="eHZ-Ae-87J" secondAttribute="bottom" constant="8" symbolic="YES" id="hTx-yO-P9G"/>
+                            <constraint firstItem="3B7-rB-d1I" firstAttribute="baseline" secondItem="GhG-Fy-tIF" secondAttribute="baseline" id="hg5-HV-esO"/>
+                            <constraint firstItem="3B7-rB-d1I" firstAttribute="centerX" secondItem="eHZ-Ae-87J" secondAttribute="centerX" id="mFD-4B-fd5"/>
+                            <constraint firstItem="eHZ-Ae-87J" firstAttribute="top" secondItem="OIA-tz-sWZ" secondAttribute="bottom" constant="8" id="oQy-DP-cuz"/>
+                            <constraint firstItem="eHZ-Ae-87J" firstAttribute="leading" secondItem="9Gt-Mu-mLx" secondAttribute="leading" constant="7" id="wV6-fL-Lv9"/>
+                        </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" id="Mzf-ss-AoP"/>
                     <connections>
                         <outlet property="cardsBoundaryView" destination="eHZ-Ae-87J" id="FO4-aO-WNb"/>
@@ -146,6 +192,16 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6YR-8u-Spa" sceneMemberID="firstResponder"/>
+                <pinchGestureRecognizer id="mnv-tu-F54">
+                    <connections>
+                        <action selector="gatherCardsWithPinch:" destination="2XT-OG-GQ8" id="Lhi-jU-9iZ"/>
+                    </connections>
+                </pinchGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="NfW-4e-Vd9">
+                    <connections>
+                        <action selector="moveCardsWithPan:" destination="2XT-OG-GQ8" id="erN-ku-cvN"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1177" y="747"/>
         </scene>

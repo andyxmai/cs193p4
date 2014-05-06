@@ -25,7 +25,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //[self.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     //self.cardViews = nil;
+    [self populateCards:NO];
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    self.cardGrid.size = self.cardsBoundaryView.bounds.size;
     [self populateCards:NO];
 }
 
@@ -45,72 +52,97 @@
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
     self.cardGrid = nil;
     
+    self.animator = nil;
     [self populateCards:YES];
 }
 
 - (void)populateCards:(BOOL)animate
 {
+    [self removeAllCardViews];
     NSUInteger counter = 0;
-    for (NSUInteger i = 0; i < self.cardGrid.rowCount; i++) {
-        for (NSUInteger j = 0; j < self.cardGrid.columnCount; j++) {
-            CGPoint center = [self.cardGrid centerOfCellAtRow:i inColumn:j];
-            CGRect frame = [self.cardGrid frameOfCellAtRow:i inColumn:j];
-//            PlayingCardView *cardView = [[PlayingCardView alloc] initWithFrame:frame];
-//            cardView.center = center;
-//            Card *card = [self.game cardAtIndex:counter];
-//            cardView.suit = ((PlayingCard *)card).suit;
-//            cardView.rank = ((PlayingCard *)card).rank;
-//            cardView.faceUp = card.isChosen;
-//            
-//            UITapGestureRecognizer *singleTapCardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(flipCardWithTouch:)];
-//            [singleTapCardGestureRecognizer setNumberOfTouchesRequired:1];
-//            [cardView addGestureRecognizer:singleTapCardGestureRecognizer];
-            
-            PlayingCardView *cardView = [self.cardViews objectAtIndex:counter];
-            cardView.center = center;
-            cardView.frame = frame;
-            //cardView.faceUp = !([self.game cardAtIndex:counter].isChosen);
-            
-            if (animate) {
-                [UIView transitionWithView:self.cardsBoundaryView
+    NSUInteger row = 0;
+    NSUInteger col = 0;
+    
+    while (counter < [self.cardViews count]) {
+        //Card *card = [self.game cardAtIndex:counter];
+        if (col == self.cardGrid.columnCount) {
+            row++;
+            col = 0;
+        }
+        
+        CGPoint center = [self.cardGrid centerOfCellAtRow:row inColumn:col];
+        CGRect frame = [self.cardGrid frameOfCellAtRow:row inColumn:col];
+        
+        PlayingCardView *cardView = [self.cardViews objectAtIndex:counter];
+        cardView.center = center;
+        cardView.frame = frame;
+        //cardView.faceUp = !card.isChosen;
+        //cardView.faceUp = card.isMatched;
+        
+        if (animate) {
+            [UIView transitionWithView:self.cardsBoundaryView
                               duration:0.5
-                               options:UIViewAnimationOptionTransitionCurlUp
+                               options:UIViewAnimationOptionTransitionCurlDown
                             animations:^ { [self.cardsBoundaryView addSubview:cardView]; }
                             completion:nil];
-            } else {
-                [self.cardsBoundaryView addSubview:cardView];
-            }
-            //ADD THIS ^!!!!!!!
-            counter++;
+        } else {
+            [self.cardsBoundaryView addSubview:cardView];
         }
+        
+        col++;
+        
+        counter++;
     }
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+    
+//    NSUInteger counter = 0;
+//    for (NSUInteger i = 0; i < self.cardGrid.rowCount; i++) {
+//        for (NSUInteger j = 0; j < self.cardGrid.columnCount; j++) {
+//            CGPoint center = [self.cardGrid centerOfCellAtRow:i inColumn:j];
+//            CGRect frame = [self.cardGrid frameOfCellAtRow:i inColumn:j];
+//            
+//            PlayingCardView *cardView = [self.cardViews objectAtIndex:counter];
+//            cardView.center = center;
+//            cardView.frame = frame;
+//            //cardView.faceUp = !([self.game cardAtIndex:counter].isChosen);
+//            
+//            if (animate) {
+//                [UIView transitionWithView:self.cardsBoundaryView
+//                              duration:0.5
+//                               options:UIViewAnimationOptionTransitionCurlUp
+//                            animations:^ { [self.cardsBoundaryView addSubview:cardView]; }
+//                            completion:nil];
+//            } else {
+//                [self.cardsBoundaryView addSubview:cardView];
+//            }
+//            //ADD THIS ^!!!!!!!
+//            counter++;
+//        }
+//    }
+//    
+//    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
 
 - (void)flipCardWithTouch:(UITapGestureRecognizer *)recognizer
 {
-    CardView *cardView = (CardView *)(recognizer.view);
-    cardView.faceUp = !cardView.faceUp;
-    int chosenCardViewIndex = [self.cardViews indexOfObject:cardView];
-    //NSLog(@"%@",[NSString stringWithFormat:@"%d", chosenCardViewIndex]);
-
-    [UIView transitionWithView:cardView
-                      duration:0.5
-                       options:UIViewAnimationOptionTransitionFlipFromRight
-                    animations:^{
-                        [self.game chooseCardAtIndex:chosenCardViewIndex];
-                        
-                    }
-                    completion:nil];
-    [self populateCards:NO];
-    
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
-    
-    
-//    [self.game chooseCardAtIndex:chosenCardViewIndex];
-//    
-//    [self populateCards];
-//    
-//    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+    if (!self.animator) {
+        CardView *cardView = (CardView *)(recognizer.view);
+        int chosenCardViewIndex = [self.cardViews indexOfObject:cardView];
+        Card *chosenCard = [self.game cardAtIndex:chosenCardViewIndex];
+        if (!chosenCard.isMatched) {
+            cardView.faceUp = !cardView.faceUp;
+            [UIView transitionWithView:cardView
+                              duration:0.5
+                               options:UIViewAnimationOptionTransitionFlipFromRight
+                            animations:nil
+                            completion:nil];
+            [self.game chooseCardAtIndex:chosenCardViewIndex];
+            [self populateCards:NO];
+        }
+    } else {
+        [self populateCards:YES];
+        self.animator = nil;
+    }
 }
 
 - (NSMutableArray *)cardViews
@@ -143,6 +175,54 @@
     }
     
     return _cardGrid;
+}
+- (IBAction)gatherCardsWithPinch:(UIPinchGestureRecognizer *)gesture {
+    NSLog(@"HERE");
+    if ((gesture.state == UIGestureRecognizerStateChanged) ||
+        (gesture.state == UIGestureRecognizerStateEnded)) {
+        if (!self.animator) {
+            CGPoint center = [gesture locationInView:self.cardsBoundaryView];
+            self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.cardsBoundaryView];
+            for (UIView *cardView in self.cardViews) {
+                UISnapBehavior *snapBehavior = [[UISnapBehavior alloc] initWithItem:cardView snapToPoint:center];
+                [self.animator addBehavior:snapBehavior];
+            }
+        }
+    }
+}
+
+- (IBAction)moveCardsWithPan:(UIPanGestureRecognizer *)gesture {
+    if (self.animator) {
+        CGPoint point = [gesture locationInView:self.cardsBoundaryView];
+        if (gesture.state == UIGestureRecognizerStateBegan) {
+            NSLog(@"Pan Began");
+            for (UIDynamicBehavior *behavior in self.animator.behaviors) {
+                [self.animator removeBehavior:behavior];
+            }
+            
+            for (UIView *cardView in self.cardViews) {
+                UIAttachmentBehavior *attachBehavior = [[UIAttachmentBehavior alloc] initWithItem:cardView attachedToAnchor:point];
+                [self.animator addBehavior:attachBehavior];
+            }
+        } else if (gesture.state == UIGestureRecognizerStateChanged) {
+            NSLog(@"Panning");
+            for (UIDynamicBehavior *behavior in self.animator.behaviors) {
+                ((UIAttachmentBehavior *)behavior).anchorPoint = point;
+            }
+        } else if (gesture.state == UIGestureRecognizerStateEnded) {
+            NSLog(@"Pan Ended");
+            for (UIDynamicBehavior *behavior in self.animator.behaviors) {
+                [self.animator removeBehavior:behavior];
+            }
+        
+            for (UIView *cardView in self.cardViews) {
+                UISnapBehavior *snapBehavior = [[UISnapBehavior alloc] initWithItem:cardView snapToPoint:point];
+                [self.animator addBehavior:snapBehavior];
+            }
+            
+            //self.animator = nil;
+        }
+    }
 }
 
 /*
